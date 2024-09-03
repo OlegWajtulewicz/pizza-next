@@ -104,7 +104,30 @@ html {
   .text-balance {
     text-wrap: balance;
   }
+  .overflow-auto {
+    overflow-y: scroll !important;
+    
+  }
+  @media (max-width: 1200px) {
+    .modal-adaptive {
+      
+      width: 80%;
+    }
+  }
+  @media (max-width: 760px) {
+    .modal-adaptive {
+       /* flex-direction: column ; */
+      
+    }
+  }
 }
+
+
+
+
+
+
+
 
 @layer base {
   * {
@@ -126,3 +149,4 @@ html {
 #nprogress .spinner-icon {
   @apply border-t-primary border-l-primary !important;
 }
+

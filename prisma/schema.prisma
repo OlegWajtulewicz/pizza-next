@@ -57,14 +57,11 @@ model ProductItem {
 
 model Ingredient {
   id        Int        @id @default(autoincrement())
-
   name      String
   price     Int
   imageUrl  String
-  
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-
   cartItems CartItem[] @relation("CartItemToIngredient")
   products  Product[]  @relation("IngredientToProduct")
 }
@@ -72,7 +69,7 @@ model Ingredient {
 model Cart {
   id          Int        @id @default(autoincrement())
   userId      Int?       @unique
-  tokenId     String?
+  token       String?
   totalAmount Int        @default(0)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt

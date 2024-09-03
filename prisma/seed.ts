@@ -126,6 +126,7 @@ async function up() {
         password: hashSync('111111', 10),
         verified: new Date(),
         role: 'USER',
+        
       },
       {
         fullName: 'Admin',
@@ -133,6 +134,7 @@ async function up() {
         password: hashSync('111111', 10),
         verified: new Date(),
         role: 'ADMIN',
+        
       },
     ],
   });
@@ -350,10 +352,12 @@ async function up() {
       {
         userId: 1,
         totalAmount: 0,
+        token: '1111',
       },
       {
         userId: 2,
         totalAmount: 0,
+        token: '2222',
       },
     ],
   });
