@@ -30,8 +30,7 @@ export default async function Home({ searchParams } : { searchParams: GetSearchP
                     key={category.id}
                     title={category.name}
                     categoryId={category.id}
-                    items={category.products} 
-                    products={[]}                   
+                    items={category.products}                 
                    />
                 ),
             )}

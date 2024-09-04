@@ -4,7 +4,6 @@ import { cn } from '@/shared/lib/utils';
 import React from 'react';
 import { Button } from '../ui/button';
 import { Title } from './title';
-import { Ingredient } from '@prisma/client';
 
 interface Props {
   imageUrl: string;

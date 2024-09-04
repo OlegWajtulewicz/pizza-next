@@ -17,7 +17,14 @@ interface ReturnProps {
     items: CartStateItem[];
     totalAmount: number;
 }
-export const getCartDetails = (data: CartDTO): ReturnProps => {
+export const getCartDetails = (data: CartDTO | null): ReturnProps => {
+    if (!data || !data.items) {
+        return {
+            items: [],
+            totalAmount: 0, // или любое другое дефолтное значение
+        };
+    }
+
     const items = data.items.map((item) => ({
         id: item.id,
         quantity: item.quantity,
@@ -25,18 +32,16 @@ export const getCartDetails = (data: CartDTO): ReturnProps => {
         imageUrl: item.productItem.product.imageUrl,
         price: calcCartItemTotalPrice(item),
         pizzaSize: item.productItem.size,
-        pizzaType: item.productItem.pizzaType,
+        type: item.productItem.pizzaType,
         disabled: false,
         ingredients: item.ingredients.map((ingredient) => ({
             name: ingredient.name,
             price: ingredient.price,
         })),
-        
-    }))  as CartStateItem[];
-
+    })) as CartStateItem[];
 
     return {
         items,
         totalAmount: data.totalAmount,
-    }
+    };
 }

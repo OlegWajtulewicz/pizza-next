@@ -2,18 +2,19 @@ import { ArrowRight, Package, Percent, Truck } from "lucide-react"
 import { CheckoutItemDetails } from "./checkout-item-details"
 import { WhiteBlock } from "./white-block"
 import { Button, Skeleton } from "../ui"
-import { cn } from "@/shared/lib/utils";
 
 interface Props {
     totalAmount: number;
     loading?: boolean;
-    className?: string
+    className?: string;
+    submitting?: boolean;
+
 }
 
 const VAT = 23;
 const DELIVERY_PRICE = 500;
 
-export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, className }) => {
+export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, className, submitting }) => {
     const vatPrice = (totalAmount * VAT) / 100;
     const deliveryPrice = totalAmount > 0 ? DELIVERY_PRICE : 0;
     const totalPrice = (totalAmount + vatPrice + deliveryPrice).toFixed(2);
@@ -51,8 +52,9 @@ export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, classNa
             } 
             value={loading ? <Skeleton className="w-16 h-7"/> : `${deliveryPrice} ₽`}/>  
         <Button
+            loading={loading}
             type="submit"
-            //   disabled={!totalAmount || submitting}
+            disabled={!totalAmount || submitting}
             className="w-full h-14 rounded-lg mt-6 text-base font-bold">
             Оформить заказ
             <ArrowRight className="w-5 ml-2" />

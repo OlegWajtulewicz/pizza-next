@@ -96,7 +96,7 @@ model CartItem {
 model Order {
   id          Int         @id @default(autoincrement())
   userId      Int?
-  items       Json?
+  items       Json
   status      OrderStatus @default(PENDING)
   totalAmount Int
   paymentId   String?
