@@ -1,4 +1,4 @@
-
+'use client';
 import React from "react";
 import { WhiteBlock } from "../white-block";
 import { FormTextarea } from "../form-components";

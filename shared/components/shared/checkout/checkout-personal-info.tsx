@@ -2,10 +2,12 @@ import React from "react"
 import { FormInput } from "../form-components"
 import { WhiteBlock } from "../white-block"
 
+
 interface Props {
     className?: string;
 }
 export const CheckoutPersonalForm: React.FC<Props> = ({ className }) => {
+   
 
     return (
         <WhiteBlock title="2. Персональные данные" className={className}>

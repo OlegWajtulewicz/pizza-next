@@ -1,7 +1,7 @@
 import React from 'react';
 import { Inter } from "next/font/google";
 import "./globals.css";
-import  { Toaster } from 'react-hot-toast';
+import { Providers } from '@/shared/components/providers';
 
 const inter = Inter({ 
   subsets: ["latin"],
@@ -21,8 +21,9 @@ export default function RootLayout({
         <link rel="icon" data-rt="true" href="/logo.png" />
       </head>
       <body className={inter.className}>
-        {children}
-        <Toaster />
+        <Providers>
+          {children}
+        </Providers>
         </body>
     </html>
   );

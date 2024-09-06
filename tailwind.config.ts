@@ -14,7 +14,14 @@ const config = {
       center: true,
       padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        "2xs": "350px",
+        xs: "480px",
+        sm: "640px",
+        md: "768px",
+        lg: "1024px",
+        xl: "1280px",
+        "2xl": "1400px", // Уже указано, можно оставить
+        "3xl": "1536px", // Вы можете добавить кастомные пороги
       },
     },
     extend: {
@@ -76,5 +83,7 @@ const config = {
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config
+
+
 
 export default config

@@ -13,7 +13,8 @@
     "prisma:reset": "prisma migrate reset",
     "prisma:push": "prisma db push",
     "prisma:preview": "prisma db pull",
-    "prisma:seed": "prisma db seed"
+    "prisma:seed": "prisma db seed",
+    "postinstall": "prisma generate"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
@@ -36,6 +37,8 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.424.0",
     "next": "14.2.5",
+    "next-auth": "^4.24.7",
+    "nextjs-toploader": "^3.6.15",
     "qs": "^6.13.0",
     "react": "^18",
     "react-dadata": "^2.23.3",
@@ -43,7 +46,7 @@
     "react-hook-form": "^7.53.0",
     "react-hot-toast": "^2.4.1",
     "react-imask": "^7.6.0",
-    "react-insta-stories": "^2.6.2",
+    "react-insta-stories": "^2.7.0",
     "react-use": "^17.5.1",
     "resend": "^3.5.0",
     "sharp": "^0.33.5",

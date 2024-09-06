@@ -25,6 +25,11 @@ export { CheckoutSidebar } from "./checkout-sidebar";
 export { RequiredSymbol } from "./required-symbol";
 export { ErrorText } from "./error-text";
 export { ClearButton } from "./clear-button";
+export { ProfileButton } from "./profile-button";
+export { InfoBlock } from "./info-block";
+export { Stories } from "./stories";
+// export { ProfileButton } from "./profile-button";Stories
+
 export * from './email-templates';
 export * from "./form-components";
 export * from "./modals";

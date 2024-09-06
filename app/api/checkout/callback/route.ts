@@ -6,110 +6,6 @@ import { CartItemDTO } from "@/shared/services/dto/cart.dto";
 import { OrderStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
-// export async function POST(req: NextRequest) {
-//   try {
-//       //* получаем данные от платежа
-//       const body = (await req.json()) as PaymentCallbackData;
-
-//       //* получаем данные о заказе
-//       const order = await prisma.order.findFirst({
-//           where: {
-//             id: Number(body.object.metadata.order_id),
-//           },
-//           //? возможно не нужно
-//           // include: {
-//           //   user: true,
-//           // },
-//         });
-
-//         //* если заказ не найден
-//       if (!order) {
-//           return NextResponse.json({ error: 'Order not found' }, { status: 404 });
-//       }
-
-//       //* ответ сервера о платеже
-//       const isSucceeded = body.object.status === 'succeeded';
-
-//       //* обновляем статус заказа
-//       await prisma.order.update({
-//           where: {
-//           id: order.id,
-//           },
-//           data: {
-//           status: isSucceeded ? OrderStatus.SUCCEEDED : OrderStatus.CANCELLED,
-//           },
-//       });
-
-//           //* находим товары 
-//       const items = JSON.parse(order?.items as string) as CartItemDTO[];
-      
-//           //* отправляем письмо с данными о заказе
-//       if (isSucceeded) {
-//           await sendEmail(
-//               order.email, 
-//               'Next Pizza | Заказ оплачен!',
-//               OrderSuccessTemplate({ orderId: order.id, items })
-//           );
-//       }
-
-//   } catch (error) {
-//       console.log('[checkout/callback] error', error);
-//       return NextResponse.json({ error: 'Server error' }, { status: 500 });
-//   }
-
-
-// }
-
-
-
-//////////////////////////////////////////////////////////////////
-//     const body = (await req.json()) as PaymentCallbackData;
-  
-//     const order = await prisma.order.findFirst({
-//       where: {
-//         id: Number(body.object.metadata.order_id),
-//       },
-//       include: {
-//         user: true,
-//       },
-//     });
-  
-//     if (order) {
-//       await prisma.order.update({
-//         where: {
-//           id: order.id,
-//         },
-//         data: {
-//           status: OrderStatus.SUCCEEDED,
-//         },
-//       });
-  
-//       const items = order?.items as unknown as CartItemDTO[];
-  
-//       const html = `
-//       <h1>Спасибо за покупку!</h1>
-  
-//       <p>Ваш заказ #${order?.id} оплачен. Список товаров:</p>
-      
-//       <hr />
-  
-//       <ul>
-//           ${items
-//             .map((item) => {
-//               return `<li>${item.productItem.product.name} | (${item.productItem.price}₽ x ${item.quantity} шт.)</li>`;
-//             })
-//             .join('')}
-//       </ul>
-//       `;
-  
-//       await sendEmail(order.user.email, `Next Pizza / Заказ #${order?.id} оплачен!`, html);
-//     }
-  
-//     return new Response(null, {
-//       status: 200,
-//     });
-//   }
-  
 
 export async function POST(req: NextRequest) {
   try {
@@ -171,3 +67,57 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
   }
 }
+
+////////////////////////////////////$Recycle.Bin
+// export async function POST(req: NextRequest) {
+//   try {
+//       //* получаем данные от платежа
+//       const body = (await req.json()) as PaymentCallbackData;
+
+//       //* получаем данные о заказе
+//       const order = await prisma.order.findFirst({
+//           where: {
+//             id: Number(body.object.metadata.order_id),
+//           },
+
+//         });
+
+//         //* если заказ не найден
+//       if (!order) {
+//           return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+//       }
+
+//       //* ответ сервера о платеже
+//       const isSucceeded = body.object.status === 'succeeded';
+
+//       //* обновляем статус заказа
+//       await prisma.order.update({
+//           where: {
+//           id: order.id,
+//           },
+//           data: {
+//           status: isSucceeded ? OrderStatus.SUCCEEDED : OrderStatus.CANCELLED,
+//           },
+//       });
+
+//           //* находим товары 
+//       const items = JSON.parse(order?.items as string) as CartItemDTO[];
+      
+//           //* отправляем письмо с данными о заказе
+//       if (isSucceeded) {
+//           await sendEmail(
+//               order.email, 
+//               'Next Pizza | Заказ оплачен!',
+//               OrderSuccessTemplate({ orderId: order.id, items })
+//           );
+//       }
+
+//   } catch (error) {
+//       console.log('[checkout/callback] error', error);
+//       return NextResponse.json({ error: 'Server error' }, { status: 500 });
+//   }
+
+
+// }
+
+

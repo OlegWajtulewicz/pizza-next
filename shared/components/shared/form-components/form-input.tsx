@@ -1,3 +1,4 @@
+'use client';
 import { useFormContext } from "react-hook-form";
 import { Input } from "../../ui/input";
 import { ClearButton } from "../clear-button";
@@ -31,7 +32,7 @@ export const FormInput: React.FC<Props> = ({ name, label, required, className, .
                 </p>
             )}
             <div className="relative">
-                <Input className="h-12 text-sm" {...register(name)} {...props} />
+                <Input className="h-12 text-sm" {...register(name)} {...props} value={value !== undefined ? value : ""}/>
 
               {value &&  <ClearButton onClick={onClear} />}
             </div>

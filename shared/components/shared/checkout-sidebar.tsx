@@ -8,13 +8,13 @@ interface Props {
     loading?: boolean;
     className?: string;
     submitting?: boolean;
-
+    totalPrice: number,
 }
 
 const VAT = 23;
 const DELIVERY_PRICE = 500;
 
-export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, className, submitting }) => {
+export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, submitting }) => {
     const vatPrice = (totalAmount * VAT) / 100;
     const deliveryPrice = totalAmount > 0 ? DELIVERY_PRICE : 0;
     const totalPrice = (totalAmount + vatPrice + deliveryPrice).toFixed(2);
