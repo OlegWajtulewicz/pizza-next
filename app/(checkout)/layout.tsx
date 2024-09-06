@@ -1,5 +1,6 @@
 import { Header } from "@/shared/components/shared"
 import { Metadata } from "next"
+import { Suspense } from "react"
 
 export const metadata: Metadata = {
     title: 'Pizza Next | Корзина',
@@ -15,7 +16,9 @@ export const metadata: Metadata = {
         <main
           className="min-h-screen bg-[#F4F1EE]"
         >
-            <Header hasCart={false} hasSearch={false} className="border-gray-200" />
+           <Suspense fallback={<div>Loading...</div>}>
+              <Header hasCart={false} hasSearch={false} className="border-gray-200" />
+            </Suspense>
             {children}
         </main>
     )

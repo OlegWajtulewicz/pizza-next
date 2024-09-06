@@ -95,7 +95,7 @@ export default function CheckoutPage() {
                     <CheckoutSidebar 
                             totalAmount={totalAmount}
                             loading={loading || submitting} 
-                            totalPrice={0} 
+                           
                             />
                 </div>
             </div>

@@ -8,7 +8,7 @@ interface Props {
     loading?: boolean;
     className?: string;
     submitting?: boolean;
-    totalPrice: number,
+    //totalPrice: number,
 }
 
 const VAT = 23;
