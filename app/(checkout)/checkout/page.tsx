@@ -93,8 +93,10 @@ export default function CheckoutPage() {
                 </div>
                 <div className="w-[30%]">
                     <CheckoutSidebar 
-                        totalAmount={totalAmount} 
-                        loading={loading || submitting} />
+                            totalAmount={totalAmount}
+                            loading={loading || submitting} 
+                            totalPrice={0} 
+                            />
                 </div>
             </div>
             </form>
