@@ -1,6 +1,5 @@
 import { ProductsGroupList } from "@/shared/components/shared/products-group-list";
 import { Title, Container, TopBar, Filters, Stories } from "../../shared/components/shared";
-import { prisma } from "@/prisma/prisma-client";
 import { Suspense } from "react";
 import { findPizzas, GetSearchParams } from "@/shared/lib/find-pizzas";
 
@@ -30,8 +29,8 @@ export default async function Home({ searchParams } : { searchParams: GetSearchP
                     key={category.id}
                     title={category.name}
                     categoryId={category.id}
-                    items={category.products}                 
-                   />
+                    items={category.products} products={[]}                  
+                     />
                 ),
             )}
           </div>

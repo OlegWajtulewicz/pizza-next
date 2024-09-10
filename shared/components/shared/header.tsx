@@ -46,6 +46,7 @@ export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart =
     }
   },  []); 
 
+
   return (
         <header className={cn('border-b ', className)}>
           <Container className="flex items-center justify-between py-8">
@@ -58,23 +59,17 @@ export const Header: React.FC<Props> = ({ className, hasSearch = true, hasCart =
                 </div>
               </div>
             </Link>
-           
             {hasSearch && (
                 <div className="mx-10 flex-1">
                      <SearchInput /> 
                 </div>
             )}
-    
             {/* prawo */}
-    
             <div className="flex items-center gap-3">
             <AuthModal open={openAuthModal}  onClose={() => setOpenAuthModal(false)} />
-
               <ProfileButton onClickSignIn={() => setOpenAuthModal(true)} /> 
                 
-             
-            
-             {hasCart && ( <CartButton />)}
+             {hasCart &&  <CartButton />}
             </div>
           </Container>
         </header>

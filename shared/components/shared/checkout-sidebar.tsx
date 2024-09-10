@@ -1,3 +1,4 @@
+'use client'
 import { ArrowRight, Package, Percent, Truck } from "lucide-react"
 import { CheckoutItemDetails } from "./checkout-item-details"
 import { WhiteBlock } from "./white-block"

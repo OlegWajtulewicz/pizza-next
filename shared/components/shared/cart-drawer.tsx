@@ -22,7 +22,7 @@ import { Title } from './title';
 import { useCart } from '@/shared/hooks';
 
 export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
-  const { totalAmount, items, updateItemQuantity, removeCartItem } = useCart();
+  const { totalAmount, items, updateItemQuantity, removeCartItem, loading } = useCart();
   const [ redirecting, setRedirecting ] = React.useState(false);
  
 
@@ -102,7 +102,7 @@ export const CartDrawer: React.FC<React.PropsWithChildren> = ({ children }) => {
                         <Link href="/checkout">
                           <Button
                           onClick={() => setRedirecting(true)}
-                            loading={redirecting}
+                            loading={loading || redirecting}
                             type="submit"
                             className="w-full h-12 text-base">
                             Оформить заказ

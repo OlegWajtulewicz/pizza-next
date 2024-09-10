@@ -45,6 +45,13 @@ export default function CheckoutPage() {
             }
         }, [session]);
 
+        const VAT = 23;
+        const DELIVERY_PRICE = 500;
+
+        const vatPrice = (totalAmount * VAT) / 100;
+        const deliveryPrice = totalAmount > 0 ? DELIVERY_PRICE : 0;
+        const totalPrice = (totalAmount + vatPrice + deliveryPrice).toFixed(2);
+
     const onSubmit = async (data: CheckoutFormValues) => {
         try {
             setSubmitting(true);

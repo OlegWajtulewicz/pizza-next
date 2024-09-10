@@ -5,6 +5,7 @@ import { CheckoutItem } from "../checkout-item";
 import { WhiteBlock } from "../white-block";
 import { CartStateItem } from "@/shared/lib/get-cart-details";
 import { CheckoutItemSkeleton } from "../checkout-item-skeleton";
+import { Trash2 } from "lucide-react";
 
 interface Props {
     items: CartStateItem[];
@@ -12,11 +13,23 @@ interface Props {
     removeCartItem: (id: number) => void;
     className?: string;
     loading?: boolean;
+    
 }
 export const CheckoutCart: React.FC<Props> = ({ items, onClickCountButton, removeCartItem, className, loading }) => {
 
     return (
-        <WhiteBlock title="1. Корзина" className={className}> 
+        <WhiteBlock 
+            title="1. Корзина" 
+            className={className}
+            // endAdornment={
+            //     totalAmount > 0 && (
+            //       <button type="button" className="flex items-center gap-3 text-gray-400 hover:text-gray-600">
+            //         <Trash2 size={16} />
+            //         Очистить корзину
+            //       </button>
+            //     )
+            //   }
+            > 
             <div className="flex flex-col gap-5">
             {loading 
             ? [...Array(4)].map((_, index) => <CheckoutItemSkeleton key={index} />)
@@ -40,6 +53,7 @@ export const CheckoutCart: React.FC<Props> = ({ items, onClickCountButton, remov
                 ))}
             
             </div>
+            {/* {!totalAmount && <p className="text-center text-gray-400 p-10">Корзина пустая</p>} */}
         </WhiteBlock>
     )
 }

@@ -14,7 +14,7 @@ export const SortPopup: React.FC<Props> = ({ className }) => {
       <PopoverTrigger asChild>
         <div
           className={cn(
-            'inline-flex items-center gap-1 bg-gray-50 px-5 h-[52px] rounded-md cursor-pointer bg-trans',
+            'inline-flex items-center invisible gap-1 bg-gray-50 px-5 h-[52px] rounded-md cursor-pointer bg-trans',
             className,
           )}>
           <ArrowUpDown size={16} />

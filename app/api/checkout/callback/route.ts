@@ -68,6 +68,74 @@ export async function POST(req: NextRequest) {
   }
 }
 
+// export async function POST(req: NextRequest) {
+//   try {
+//     console.log('Полученный запрос');
+//     const body = (await req.json()) as PaymentCallbackData;
+
+//     console.log('Разобранное тело:', body);
+
+//     if (!body || !body.object || !body.object.metadata?.order_id) {
+//       return NextResponse.json({ error: 'Invalid request body' }, { status: 400 });
+//     }
+
+//     const order = await prisma.order.findFirst({
+//       where: {
+//         id: Number(body.object.metadata.order_id),
+//       },
+//     });
+
+//     console.log('Полученный заказ:', order);
+
+//     if (!order) {
+//       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
+//     }
+
+//     const isSucceeded = body?.object?.status === 'succeeded';
+
+//     await prisma.order.update({
+//       where: {
+//         id: order.id,
+//       },
+//       data: {
+//         status: isSucceeded ? OrderStatus.SUCCEEDED : OrderStatus.CANCELLED,
+//       },
+//     });
+
+//     console.log('Обновление статуса заказа');
+
+//     const items = JSON.parse(order?.items as string) as CartItemDTO[];
+    
+//     console.log('Разобранные элементы:', items);
+
+//     if (isSucceeded) {
+//       try {
+//         await sendEmail(
+//           order.email,
+//           `Next Pizza | Заказ оплачен!`,
+//           OrderSuccessTemplate({
+//             orderId: order.id, items,
+//             totalAmount: order.totalAmount,
+//             totalPrice: order.totalAmount,
+//             vatPrice: order.vatAmount,
+//             deliveryPrice: order.deliveryAmount,
+//            // paymentUrl: "",
+//           })
+//         );
+//         console.log('Электронная почта отправлена');
+//       } catch (emailError) {
+//         console.error('Error sending email:', emailError);
+//       }
+//     }
+
+//     return NextResponse.json({ message: 'Платеж успешно обработан' });
+
+//   } catch (error) {
+//     console.error('[checkout/callback] error', error);
+//     return NextResponse.json({ error: 'Server error' }, { status: 500 });
+//   }
+// }
+
 ////////////////////////////////////$Recycle.Bin
 // export async function POST(req: NextRequest) {
 //   try {

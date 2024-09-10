@@ -60,7 +60,8 @@ export async function POST(req: NextRequest) {
         const userCart = await findOrCreateCart(token);
 
         const data = await req.json() as CreateCartItemValues;
-        
+
+        //* Если нет в корзине то добавляем в корзину. Сортировка при добавлении
         const findCartItem = await prisma.cartItem.findFirst({
             where: {
                 cartId: userCart.id,
@@ -69,11 +70,19 @@ export async function POST(req: NextRequest) {
                     every: {
                         id: { in: data.ingredients },
                     },
-                    some: {},
+                  //  some: {},
                 },
             },
+            include: {
+                productItem: {
+                    include: {
+                        product: true,
+                    },
+                },
+                ingredients: true,
+            },
         });
-        // Если товар был найден делаем + 1
+        //* Если товар был найден делаем + 1
         if (findCartItem) {
             await prisma.cartItem.update({
                 where: {
@@ -106,3 +115,5 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Dont have POST' }, { status: 500 });
     }   
 }
+
+

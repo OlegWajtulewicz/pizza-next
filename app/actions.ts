@@ -9,6 +9,7 @@ import { PayOrderTemplate } from '@/shared/components/shared/email-templates';
 import { getUserSession } from "@/shared/lib/get-user-session";
 import { hashSync } from "bcrypt";
 import { VerificationUserTemplate } from "@/shared/components/shared/email-templates/verification-user";
+import { revalidatePath } from "next/cache";
 
 
 export async function registerUser(body: Prisma.UserCreateInput) {
@@ -61,7 +62,7 @@ export async function registerUser(body: Prisma.UserCreateInput) {
   }
 
   
-export async function createOrder(data: CheckoutFormValues) {
+  export async function createOrder(data: CheckoutFormValues) {
     try {
         const cookieStore = cookies();
         const cartToken = cookieStore.get('cartToken')?.value;
@@ -111,6 +112,8 @@ export async function createOrder(data: CheckoutFormValues) {
                 totalAmount: useCart.totalAmount,
                 status: OrderStatus.PENDING,
                 items: JSON.stringify(useCart.items),
+                vatAmount: 0,
+                deliveryAmount: 0,
             },
         });
 
@@ -198,3 +201,227 @@ export async function updateUserInfo(body: Prisma.UserCreateInput) {
         throw error;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+/* Dashboard Actions */
+
+export async function updateUser(id: number, data: Prisma.UserUpdateInput) {
+    try {
+      await prisma.user.update({
+        where: {
+          id,
+        },
+        data: {
+          ...data,
+          verified: new Date(),
+          ...(data.password && { password: hashSync(String(data.password), 10) }),
+        },
+      });
+    } catch (error) {
+      console.log('Error [UPDATE_USER]', error);
+      throw error;
+    }
+  }
+  
+  export async function createUser(data: Prisma.UserCreateInput) {
+    try {
+      await prisma.user.create({
+        data: {
+          ...data,
+          password: hashSync(data.password, 10),
+        },
+      });
+  
+      revalidatePath('/dashboard/users');
+    } catch (error) {
+      console.log('Error [CREATE_USER]', error);
+      throw error;
+    }
+  }
+  
+  export async function deleteUser(id: number) {
+    await prisma.user.delete({
+      where: {
+        id,
+      },
+    });
+  
+    revalidatePath('/dashboard/users');
+  }
+  
+  export async function updateCategory(id: number, data: Prisma.CategoryUpdateInput) {
+    try {
+      await prisma.category.update({
+        where: {
+          id,
+        },
+        data,
+      });
+    } catch (error) {
+      console.log('Error [UPDATE_CATEGORY]', error);
+      throw error;
+    }
+  }
+  
+  export async function createCategory(data: Prisma.CategoryCreateInput) {
+    try {
+      await prisma.category.create({
+        data,
+      });
+  
+      revalidatePath('/dashboard/categories');
+    } catch (error) {
+      console.log('Error [CREATE_CATEGORY]', error);
+      throw error;
+    }
+  }
+  
+  export async function deleteCategory(id: number) {
+    await prisma.category.delete({
+      where: {
+        id,
+      },
+    });
+  
+    revalidatePath('/dashboard/categories');
+  }
+  
+  export async function updateProduct(id: number, data: Prisma.ProductUpdateInput) {
+    try {
+      await prisma.product.update({
+        where: {
+          id,
+        },
+        data,
+      });
+    } catch (error) {
+      console.log('Error [UPDATE_PRODUCT]', error);
+      throw error;
+    }
+  }
+  
+  export async function createProduct(data: Prisma.ProductCreateInput) {
+    try {
+      await prisma.product.create({
+        data,
+      });
+  
+      revalidatePath('/dashboard/products');
+    } catch (error) {
+      console.log('Error [CREATE_PRODUCT]', error);
+      throw error;
+    }
+  }
+  
+  export async function deleteProduct(id: number) {
+    await prisma.product.delete({
+      where: {
+        id,
+      },
+    });
+  
+    revalidatePath('/dashboard/products');
+  }
+  
+  export async function updateIngredient(id: number, data: Prisma.IngredientUpdateInput) {
+    try {
+      await prisma.ingredient.update({
+        where: {
+          id,
+        },
+        data,
+      });
+    } catch (error) {
+      console.log('Error [UPDATE_INGREDIENT]', error);
+      throw error;
+    }
+  }
+  
+  export async function createIngredient(data: Prisma.IngredientCreateInput) {
+    try {
+      await prisma.ingredient.create({
+        data: {
+          name: data.name,
+          imageUrl: data.imageUrl,
+          price: data.price,
+        },
+      });
+  
+      revalidatePath('/dashboard/ingredients');
+    } catch (error) {
+      console.log('Error [CREATE_INGREDIENT]', error);
+      throw error;
+    }
+  }
+  
+  export async function deleteIngredient(id: number) {
+    try {
+      await prisma.ingredient.delete({
+        where: {
+          id,
+        },
+      });
+  
+      revalidatePath('/dashboard/ingredients');
+    } catch (error) {
+      console.log('Error [DELETE_INGREDIENT]', error);
+      throw error;
+    }
+  }
+  
+  export async function updateProductItem(id: number, data: Prisma.ProductItemUpdateInput) {
+    try {
+      await prisma.productItem.update({
+        where: {
+          id,
+        },
+        data,
+      });
+    } catch (error) {
+      console.log('Error [UPDATE_PRODUCT_ITEM]', error);
+      throw error;
+    }
+  }
+  
+  export async function createProductItem(data: Prisma.ProductItemUncheckedCreateInput) {
+    try {
+      await prisma.productItem.create({
+        data: {
+          price: data.price,
+          size: data.size,
+          pizzaType: data.pizzaType,
+          productId: data.productId,
+        },
+      });
+  
+      revalidatePath('/dashboard/product-items');
+    } catch (error) {
+      console.log('Error [CREATE_PRODUCT_ITEM]', error);
+      throw error;
+    }
+  }
+  
+  export async function deleteProductItem(id: number) {
+    try {
+      await prisma.productItem.delete({
+        where: {
+          id,
+        },
+      });
+  
+      revalidatePath('/dashboard/product-items');
+    } catch (error) {
+      console.log('Error [DELETE_PRODUCT_ITEM]', error);
+      throw error;
+    }
+  }
