@@ -47,130 +47,263 @@ export async function registerUser(body: Prisma.UserCreateInput) {
       });
   
       console.log(createdUser);
+
+      const html = `
+      <p>Код подтверждения: <h2>${code}</h2></p>
+      <p><a href="http://localhost:3000/api/auth/verify?code=${code}">Подтвердить регистрацию</a></p>
+      `;
   
-      await sendEmail(
-        createdUser.email, 
-        'Next Pizza | 📝 Подтверждение регистрации',
-        VerificationUserTemplate({ 
-            code, 
-        })
-    );
+      await sendEmail(createdUser.email, 'Next Pizza | Подтверждение регистрации', html);
+  
+    //   await sendEmail(
+    //     createdUser.email, 
+    //     'Next Pizza | 📝 Подтверждение регистрации',
+    //     VerificationUserTemplate({ 
+    //         code, 
+    //     })
+    // );
     } catch (error) {
       console.log('Error [CREATE_USER]', error);
       throw error;
     }
+}
+
+export async function createOrder(data: CheckoutFormValues) {
+  console.log('createOrder called with:', data);
+  try {
+      const cookieStore = cookies();
+      const cartToken = cookieStore.get('cartToken')?.value;
+
+      if (!cartToken) {
+          throw new Error('No token found in cookies');
+      }
+
+      // Найти корзину по токену
+      const useCart = await prisma.cart.findFirst({
+          include: {
+              user: true,
+              items: {
+                  include: {
+                      ingredients: true,
+                      productItem: {
+                          include: {
+                              product: true,
+                          },
+                      },
+                  },
+              },
+          },
+          where: {
+              token: cartToken,
+          },
+      });
+
+      if (!useCart) {
+          throw new Error('Cart not found');
+      }
+
+      if (useCart.totalAmount === 0) {
+          throw new Error('Cart is empty');
+      }
+
+      // Создать заказ
+      const order = await prisma.order.create({
+          data: {
+              fullName: `${data.firstName} ${data.lastName}`,
+              email: data.email,
+              phone: data.phone,
+              address: data.address,
+              comment: data.comment,
+              totalAmount: useCart.totalAmount,
+              status: OrderStatus.PENDING,
+              items: JSON.stringify(useCart.items),
+              vatAmount: 0,
+              deliveryAmount: 0,
+          },
+      });
+      console.log('Order created:', order);
+      // Очистить корзину
+      await prisma.cart.update({
+          where: {
+              id: useCart.id,
+          },
+          data: {
+              totalAmount: 0,
+          },
+      });
+
+      await prisma.cartItem.deleteMany({
+          where: {
+              cartId: useCart.id,
+          },
+      });
+
+      // Создание платежа
+      const paymentData = await createPayment({
+          amount: order.totalAmount,
+          orderId: order.id,
+          description: `Оплата заказа #${order.id}`,
+      });
+      console.log('Payment data:', paymentData);
+      if (!paymentData) {
+          throw new Error('Payment data not found');
+      }
+
+      await prisma.order.update({
+          where: {
+              id: order.id,
+          },
+          data: {
+              paymentId: paymentData.id,
+          },
+      });
+
+      const paymentUrl = paymentData.confirmation.confirmation_url;
+
+      const html = `
+      <h1>Заказ #${order?.id}</h1>
+
+      <p>Оплатите заказ на сумму ${order?.totalAmount} ₽. Перейдите <a href="${paymentData.confirmation.confirmation_url}">по ссылке</a> для оплаты заказа.</p>
+    `;
+  //  if (useCart.user?.email) {
+      await sendEmail(
+        data.email, 
+        `Next Pizza | Оплатите заказ #${order?.id}`, 
+        html,
+        
+      );
+  //  }
+
+      // Отправка письма
+      // await sendEmail(
+      //     data.email,
+      //     `Pizza Next | Оплатите заказ #${order.id}`,
+      //     html,
+
+      //     // PayOrderTemplate({
+      //     //     orderId: order.id,
+      //     //     totalAmount: order.totalAmount,
+      //     //     paymentUrl,
+      //     // })
+      // );
+
+      return paymentUrl;
+  } catch (error) {
+      console.error('[actions.ts:createOrder] Server error', error);
+      throw error; // Обязательно бросайте ошибку, чтобы она могла быть обработана выше
   }
+}
 
   
-  export async function createOrder(data: CheckoutFormValues) {
-    try {
-        const cookieStore = cookies();
-        const cartToken = cookieStore.get('cartToken')?.value;
+//   export async function createOrder(data: CheckoutFormValues) {
+//     try {
+//         const cookieStore = cookies();
+//         const cartToken = cookieStore.get('cartToken')?.value;
 
-        if (!cartToken) {
-            throw new Error('No token');
-        }
-        //* находим корзину по токену
-        const useCart = await prisma.cart.findFirst({
-            include: {
-                user: true,
-                items : {
-                    include: {
-                        ingredients: true,
-                        productItem: {
-                            include: {
-                                product: true,
-                            },
-                        }, 
-                    },
-                },
-            },
-            where: {
-                token: cartToken,
-            },
-        });
+//         if (!cartToken) {
+//             throw new Error('No token');
+//         }
+//         //* находим корзину по токену
+//         const useCart = await prisma.cart.findFirst({
+//             include: {
+//                 user: true,
+//                 items : {
+//                     include: {
+//                         ingredients: true,
+//                         productItem: {
+//                             include: {
+//                                 product: true,
+//                             },
+//                         }, 
+//                     },
+//                 },
+//             },
+//             where: {
+//                 token: cartToken,
+//             },
+//         });
 
-        //* если корзина не найдена возвращаем ошибку
-        if (!useCart) {
-            throw new Error('Cart not found');
-        }
+//         //* если корзина не найдена возвращаем ошибку
+//         if (!useCart) {
+//             throw new Error('Cart not found');
+//         }
 
-        //* если корзина пустая возвращаем ошибку
-        if (useCart?.totalAmount === 0) {
-            throw new Error('Cart is empty');
-        }
+//         //* если корзина пустая возвращаем ошибку
+//         if (useCart?.totalAmount === 0) {
+//             throw new Error('Cart is empty');
+//         }
 
-        //* создаем заказ
-        const order = await prisma.order.create({
-            data: {
-              //  token: cartToken,
-                fullName: data.firstName + ' ' + data.lastName,
-                email: data.email,
-                phone: data.phone,
-                address: data.address,
-                comment: data.comment,
-                totalAmount: useCart.totalAmount,
-                status: OrderStatus.PENDING,
-                items: JSON.stringify(useCart.items),
-                vatAmount: 0,
-                deliveryAmount: 0,
-            },
-        });
+//         //* создаем заказ
+//         const order = await prisma.order.create({
+//             data: {
+//               //  token: cartToken,
+//                 fullName: data.firstName + ' ' + data.lastName,
+//                 email: data.email,
+//                 phone: data.phone,
+//                 address: data.address,
+//                 comment: data.comment,
+//                 totalAmount: useCart.totalAmount,
+//                 status: OrderStatus.PENDING,
+//                 items: JSON.stringify(useCart.items),
+//                 vatAmount: 0,
+//                 deliveryAmount: 0,
+//             },
+//         });
 
-        //* очищаем стоимость корзины
-        await prisma.cart.update({
-            where: {
-                id: useCart.id,
-            },
-            data: {
-                totalAmount: 0,
-            },
-        });
+//         //* очищаем стоимость корзины
+//         await prisma.cart.update({
+//             where: {
+//                 id: useCart.id,
+//             },
+//             data: {
+//                 totalAmount: 0,
+//             },
+//         });
         
-        //* очищаем корзину от товаров
-        await prisma.cartItem.deleteMany({
-            where: {
-                cartId: useCart.id,
-            },
-        });
+//         //* очищаем корзину от товаров
+//         await prisma.cartItem.deleteMany({
+//             where: {
+//                 cartId: useCart.id,
+//             },
+//         });
 
-        // TODO: создание ссылки на страницу успешного оформления заказа
+//         // TODO: создание ссылки на страницу успешного оформления заказа
 
-        const paymentData = await createPayment({
-            amount: order.totalAmount,
-            orderId: order.id,
-            description: 'Оплата заказа #' + order.id,
-        });
+//         const paymentData = await createPayment({
+//             amount: order.totalAmount,
+//             orderId: order.id,
+//             description: 'Оплата заказа #' + order.id,
+//         });
 
-        if (!paymentData) {
-            throw new Error('Payment data not found');
-        }
+//         if (!paymentData) {
+//             throw new Error('Payment data not found');
+//         }
 
-        await prisma.order.update({
-            where: {
-                id: order.id,
-            },
-            data: {
-                paymentId: paymentData.id,
-            },
-        });
+//         await prisma.order.update({
+//             where: {
+//                 id: order.id,
+//             },
+//             data: {
+//                 paymentId: paymentData.id,
+//             },
+//         });
 
-        const paymentUrl = paymentData.confirmation.confirmation_url;
+//         const paymentUrl = paymentData.confirmation.confirmation_url;
 
-        await sendEmail(
-            data.email, 
-            "Pizza Next | Оплатите заказ #" + order.id, 
-            PayOrderTemplate({
-                orderId: order.id,
-                totalAmount: order.totalAmount,
-                paymentUrl,
-            }));
+//         await sendEmail(
+//             data.email, 
+//             "Pizza Next | Оплатите заказ #" + order.id, 
+//             PayOrderTemplate({
+//                 orderId: order.id,
+//                 totalAmount: order.totalAmount,
+//                 paymentUrl,
+//             }));
 
-        return paymentUrl;
-    } catch (error) {
-        console.log('[actions.ts:createOrder] Server error', error);
-    }
-}
+//         return paymentUrl;
+//     } catch (error) {
+//         console.log('[actions.ts:createOrder] Server error', error);
+//     }
+// }
 
 export async function updateUserInfo(body: Prisma.UserCreateInput) {
     try {

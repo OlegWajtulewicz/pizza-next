@@ -6,7 +6,7 @@ import { CheckoutSidebar, Container, Title } from "@/shared/components";
 import { useCart } from "@/shared/hooks";
 import { CheckoutAddressForm, CheckoutCart, CheckoutPersonalForm } from "@/shared/components";
 import { CheckoutFormValues, checkoutFormSchema } from "@/shared/constants";
-import { createOrder } from "@/app/actions";
+import { createOrder } from '@/app/actions';
 import toast from "react-hot-toast";
 import React from "react";
 import { useSession } from "next-auth/react";

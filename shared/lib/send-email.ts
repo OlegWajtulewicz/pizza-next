@@ -1,19 +1,30 @@
 import { Resend } from "resend";
+                                                              {/** template: React.ReactNode,*/}
+// export const sendEmail = async (to: string, subject: string,  html: string ) => {
+//     const resend = new Resend(process.env.RESEND_API_KEY);
+//     const { data, error } = await resend.emails.send({
+//         from: 'onboarding@resend.dev',
+//         to,
+//         subject,
+//       //  text: '',
+//       //  react: template,
+//         html,
+//     });
 
-export const sendEmail = async (to: string, subject: string, template: React.ReactNode ) => {
-    const resend = new Resend(process.env.RESEND_API_KEY);
+//     if (error) {
+//     throw error;
+//     }
 
-    const { data, error } = await resend.emails.send({
-        from: 'onboarding@resend.dev',
-        to,
-        subject,
-      //  text: '',
-        react: template,
-    });
+//     return data;
+// }
 
-    if (error) {
-    throw error;
-    }
+export const sendEmail = (to: string, subject: string, html: string) => {
+  const resend = new Resend(process.env.RESEND_API_KEY);
 
-    return data;
-}
+  return resend.emails.send({
+    from: 'onboarding@resend.dev',
+    to,
+    subject,
+    html,
+  });
+};
