@@ -47,7 +47,7 @@ export const TopBar: React.FC<Props> = ({ categories, className }) => {
           
         <Categories items={categories} className='flex-1' />
         <div className="flex items-center">
-          <SortPopup />
+          {/* <SortPopup  /> */}
           <CartButton
             className={cn(
               'transition-all',

@@ -68,6 +68,7 @@ export async function registerUser(body: Prisma.UserCreateInput) {
     }
 }
 
+
 export async function createOrder(data: CheckoutFormValues) {
   console.log('createOrder called with:', data);
   try {
@@ -105,7 +106,15 @@ export async function createOrder(data: CheckoutFormValues) {
       if (useCart.totalAmount === 0) {
           throw new Error('Cart is empty');
       }
-
+//////////////////////////////////////////////////////////
+      const convertToString = (value: string ): number => {
+        const normalizedValue = value.replace(',', '.');
+        return parseFloat(normalizedValue);
+      };
+      // Пример использования функции перед отправкой данных
+      const vatAmount = convertToString(data.vatPrice);
+      const deliveryAmount = convertToString(data.deliveryPrice);
+      const totalPriceAmount = convertToString(data.totalPrice);
       // Создать заказ
       const order = await prisma.order.create({
           data: {
@@ -113,12 +122,12 @@ export async function createOrder(data: CheckoutFormValues) {
               email: data.email,
               phone: data.phone,
               address: data.address,
-              comment: data.comment,
-              totalAmount: useCart.totalAmount,
+              comment: data.comment || '',
               status: OrderStatus.PENDING,
               items: JSON.stringify(useCart.items),
-              vatAmount: 0,
-              deliveryAmount: 0,
+              vatAmount: vatAmount,
+              deliveryAmount: deliveryAmount,
+              totalPriceAmount: totalPriceAmount,
           },
       });
       console.log('Order created:', order);
@@ -140,7 +149,7 @@ export async function createOrder(data: CheckoutFormValues) {
 
       // Создание платежа
       const paymentData = await createPayment({
-          amount: order.totalAmount,
+          amount: order.totalPriceAmount,
           orderId: order.id,
           description: `Оплата заказа #${order.id}`,
       });
@@ -163,7 +172,7 @@ export async function createOrder(data: CheckoutFormValues) {
       const html = `
       <h1>Заказ #${order?.id}</h1>
 
-      <p>Оплатите заказ на сумму ${order?.totalAmount} ₽. Перейдите <a href="${paymentData.confirmation.confirmation_url}">по ссылке</a> для оплаты заказа.</p>
+      <p>Оплатите заказ на сумму ${order?.totalPriceAmount} ₽. Перейдите <a href="${paymentData.confirmation.confirmation_url}">по ссылке</a> для оплаты заказа.</p>
     `;
   //  if (useCart.user?.email) {
       await sendEmail(

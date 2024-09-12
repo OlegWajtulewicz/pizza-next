@@ -8,9 +8,9 @@ export const checkoutFormSchema = z.object({
     phone: z.string().min(10, { message: 'Введите корректный номер телефона' }),
     address: z.string().min(5, { message: 'Введите корректный адрес' }),
     comment: z.string().optional(),
-   // totalPrice: z.number().min(0, { message: 'Некорректная сумма' }),
-   // vatPrice: z.number().min(0),
-   // deliveryPrice: z.number().min(0),
+    totalPrice: z.string().regex(/^\d+(\.\d{2})?$/, { message: 'Некорректная сумма' }), // Параметры строки с двумя десятичными знаками
+    vatPrice: z.string().regex(/^\d+(\.\d{2})?$/, { message: 'Некорректная сумма' }), 
+    deliveryPrice: z.string().regex(/^\d+(\.\d{2})?$/, { message: 'Некорректная сумма' }),
 });
 
 export type CheckoutFormValues = z.infer<typeof checkoutFormSchema>;

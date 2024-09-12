@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import React from "react";
 import { useSession } from "next-auth/react";
 import { Api } from "@/shared/services/api-client";
+import { calculatePrices } from "@/shared/lib/calculate-prices";
 
 
 export default function CheckoutPage() {
@@ -27,6 +28,9 @@ export default function CheckoutPage() {
             phone: '',
             address: '',
             comment: '',
+            totalPrice: '0.00',
+            vatPrice: '0.00',
+            deliveryPrice: '0.00',
         }
     });
 
@@ -45,17 +49,22 @@ export default function CheckoutPage() {
             }
         }, [session]);
 
-        const VAT = 23;
-        const DELIVERY_PRICE = 500;
-
-        const vatPrice = (totalAmount * VAT) / 100;
-        const deliveryPrice = totalAmount > 0 ? DELIVERY_PRICE : 0;
-        const totalPrice = (totalAmount + vatPrice + deliveryPrice).toFixed(2);
+        const { vatPrice, deliveryPrice, totalPrice } = calculatePrices(totalAmount);
 
     const onSubmit = async (data: CheckoutFormValues) => {
         try {
             setSubmitting(true);
-            const url = await createOrder(data);
+            // Обновляем данные формы
+            const updatedData = {
+                ...data,
+                vatPrice,
+                deliveryPrice,
+                totalPrice 
+            };
+            console.log('updatedData', updatedData);
+
+            // Отправка данных на сервер
+            const url = await createOrder(updatedData);
 
             toast.success('Заказ успешно создан! 📝 Перейдите по ссылке...', {
                 icon: '👏 ✅ ',
@@ -89,21 +98,23 @@ export default function CheckoutPage() {
             <div className="flex gap-10">
                 <div className="flex flex-col gap-10 flex-1 mb-20 ">  {/* w-[70%] */}
                     <CheckoutCart 
-                        items={items} 
-                        onClickCountButton={onClickCountButton} 
-                        removeCartItem={removeCartItem} 
-                        className="flex-1" 
-                        loading={loading}
-                        />
+                        items={items}
+                        onClickCountButton={onClickCountButton}
+                        removeCartItem={removeCartItem}
+                        className="flex-1"
+                        loading={loading} 
+                        totalAmount={totalAmount}                        />
                     <CheckoutPersonalForm className={loading ? "opacity-50 pointer-events-none" : ""} />
                     <CheckoutAddressForm className={loading ? "opacity-50 pointer-events-none" : ""} />
                 </div>
                 <div className="w-[30%]">
                     <CheckoutSidebar 
-                            totalAmount={totalAmount}
-                            loading={loading || submitting} 
-                           
-                            />
+                        totalAmount={totalAmount}
+                        loading={loading || submitting} 
+                        totalPrice={totalPrice}
+                        vatPrice={vatPrice}
+                        deliveryPrice={deliveryPrice}   
+                        />
                 </div>
             </div>
             </form>
@@ -111,3 +122,5 @@ export default function CheckoutPage() {
         </Container>
     )
 }
+
+

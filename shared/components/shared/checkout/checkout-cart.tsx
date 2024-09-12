@@ -13,22 +13,23 @@ interface Props {
     removeCartItem: (id: number) => void;
     className?: string;
     loading?: boolean;
+    totalAmount: number;
     
 }
-export const CheckoutCart: React.FC<Props> = ({ items, onClickCountButton, removeCartItem, className, loading }) => {
+export const CheckoutCart: React.FC<Props> = ({ items, onClickCountButton, removeCartItem, className, loading, totalAmount }) => {
 
     return (
         <WhiteBlock 
             title="1. Корзина" 
             className={className}
-            // endAdornment={
-            //     totalAmount > 0 && (
-            //       <button type="button" className="flex items-center gap-3 text-gray-400 hover:text-gray-600">
-            //         <Trash2 size={16} />
-            //         Очистить корзину
-            //       </button>
-            //     )
-            //   }
+            endAdornment={
+                totalAmount > 0 && (
+                  <button type="button" className="flex items-center gap-3 text-gray-400 hover:text-gray-600">
+                    <Trash2 size={16} />
+                    Очистить корзину
+                  </button>
+                )
+              }
             > 
             <div className="flex flex-col gap-5">
             {loading 
@@ -53,7 +54,7 @@ export const CheckoutCart: React.FC<Props> = ({ items, onClickCountButton, remov
                 ))}
             
             </div>
-            {/* {!totalAmount && <p className="text-center text-gray-400 p-10">Корзина пустая</p>} */}
+            {!totalAmount && <p className="text-center text-gray-400 p-10">Корзина пустая</p>}
         </WhiteBlock>
     )
 }

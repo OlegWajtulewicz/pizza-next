@@ -9,16 +9,26 @@ interface Props {
     loading?: boolean;
     className?: string;
     submitting?: boolean;
-    //totalPrice: number,
+    vatPrice: string;
+    deliveryPrice: string;
+    totalPrice: string;
 }
 
 const VAT = 23;
 const DELIVERY_PRICE = 500;
 
-export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, submitting }) => {
-    const vatPrice = (totalAmount * VAT) / 100;
-    const deliveryPrice = totalAmount > 0 ? DELIVERY_PRICE : 0;
-    const totalPrice = (totalAmount + vatPrice + deliveryPrice).toFixed(2);
+export const CheckoutSidebar: React.FC<Props> = ({ 
+    totalAmount, 
+    loading, 
+    className, 
+    submitting,
+    vatPrice,
+    deliveryPrice,
+    totalPrice, 
+}) => {
+    // const vatPrice = (totalAmount * VAT) / 100;
+    // const deliveryPrice = totalAmount > 0 ? DELIVERY_PRICE : 0;
+    // const totalPrice = (totalAmount + vatPrice + deliveryPrice).toFixed(2);
 
     return (
         <WhiteBlock className="p-6 sticky top-4">
@@ -55,7 +65,7 @@ export const CheckoutSidebar: React.FC<Props> = ({ totalAmount, loading, submitt
         <Button
             loading={loading}
             type="submit"
-            disabled={!totalAmount || submitting}
+            disabled={!totalPrice || submitting}
             className="w-full h-14 rounded-lg mt-6 text-base font-bold">
             Оформить заказ
             <ArrowRight className="w-5 ml-2" />

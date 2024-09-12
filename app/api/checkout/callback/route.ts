@@ -3,6 +3,7 @@ import { prisma } from "@/prisma/prisma-client";
 import { OrderSuccessTemplate } from "@/shared/components/shared/email-templates/order-success";
 import { useCart } from "@/shared/hooks";
 import { sendEmail } from "@/shared/lib";
+import { calculatePrices } from "@/shared/lib/calculate-prices";
 import { CartItemDTO } from "@/shared/services/dto/cart.dto";
 import { OrderStatus } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
@@ -130,6 +131,12 @@ export async function POST(req: NextRequest) {
         //  }
         // );
               //  );
+        // Определите значения для totalPrice, vatPrice и deliveryPrice
+      const vatPrice = order.vatAmount; // Преобразование из центов в рубли
+      const deliveryPrice = order.deliveryAmount; // Преобразование из центов в рубли
+      const totalPrice = order.totalPriceAmount; // Преобразование из центов в рубли
+      const totalAmount = totalPrice - vatPrice - deliveryPrice; // Итого сумма корзины
+
       const html = `
       <h1>Спасибо за покупку! 🎉</h1>
 
@@ -140,15 +147,23 @@ export async function POST(req: NextRequest) {
       <ul>
       ${items
         .map((item) => {
-          return `<li>${item.productItem.product.name} | (${item.productItem.price}₽ x ${item.quantity} шт.)</li>`;
+          return `<li>${item.productItem.product.name} | (${item.productItem.price} ₽ x ${item.quantity} шт.)</li>`;
         })
         .join('')}
-      </ul> `;
+      </ul> 
+      <hr />
+      <p>Итоговая стоимость корзины: ${totalAmount.toFixed(2)} ₽</p>
+      <p>Налоги (НДС): ${vatPrice.toFixed(2)} ₽</p>
+      <p>Стоимость доставки: ${deliveryPrice.toFixed(2)} ₽</p>
+      <p><strong>Общая сумма к оплате: ${totalPrice.toFixed(2)} ₽</strong></p>  
+
+      <p>Спасибо за покупку и надеемся увидеть вас снова!</p> 
+      `;
   
       await sendEmail(
         order.email, 
         `Next Pizza | Заказ #${order?.id} оплачен!`, 
-        html
+        html,
       );
 
 
