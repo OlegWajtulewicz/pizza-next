@@ -4,14 +4,16 @@ import React from 'react';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { FormInput } from '@/components/shared/form/form-input';
+
 import type { Product, ProductItem } from '@prisma/client';
 import { useParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { createProductItem, updateProductItem } from '@/app/actions';
 import { DashboardFormHeader } from '../../dashboard-form-header';
 import { CreateProductItemFormSchema, CreateProductItemFormValues } from './constants';
-import { FormSelect } from '@/components/shared/form/form-select';
+import { FormInput } from '../../../form-components/form-input';
+import { FormSelect } from '../../../form-components/form-select';
+
 
 interface Props {
   values?: ProductItem;

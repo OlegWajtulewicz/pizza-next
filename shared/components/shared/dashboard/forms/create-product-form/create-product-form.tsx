@@ -4,7 +4,7 @@ import React from "react";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { FormInput } from "@/components/shared/form/form-input";
+
 import { useRouter, useParams } from "next/navigation";
 import {
   createProduct,
@@ -17,10 +17,10 @@ import { DashboardFormHeader } from "../../dashboard-form-header";
 import {
   CreateProductFormSchema,
   CreateProductFormValues,
-} from "@/components/shared/dashboard/forms/create-product-form/constants";
+} from "@/shared/components/shared/dashboard/forms/create-product-form/constants";
 import { Product } from "@prisma/client";
-import { Trash2 } from "lucide-react";
-import { UploadButton } from "@/lib/uploadthing";
+import { FormInput, Trash2 } from "lucide-react";
+import { UploadButton } from "@/shared/lib/uploadthing";
 
 interface Props {
   values?: Product;
@@ -89,10 +89,10 @@ export const CreateProductForm: React.FC<Props> = ({ values }) => {
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <DashboardFormHeader isEdit={!!values} loading={loading} />
-        <div className="flex items-center border shadow-sm rounded-lg grid grid-cols-2 gap-5 p-5">
+        <div className=" items-center border shadow-sm rounded-lg grid grid-cols-2 gap-5 p-5">
           <div>
-            <FormInput name="name" label="Название продукта" required />
-            <FormInput name="category" label="Категория" required />
+            <FormInput name="name"  />
+            <FormInput name="category" />
           </div>
 
           {imageUrl ? (

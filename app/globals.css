@@ -101,6 +101,23 @@ html {
 }
 
 @layer utilities {
+  table {
+    border-collapse: collapse; /* Объединяет бордеры ячеек и строк */
+    
+  }
+  th {
+    border: 1px solid rgb(209 213 219 / var(--tw-border-opacity));
+    padding: 0.5rem /* 8px */;
+  }
+  td {
+    padding: 0.2rem 0.5rem;
+    border: 1px solid rgb(209 213 219 / var(--tw-border-opacity));
+  }
+  tr {
+    border: 1px solid rgb(209 213 219 / var(--tw-border-opacity));
+  }
+  
+  
   .text-balance {
     text-wrap: balance;
   }

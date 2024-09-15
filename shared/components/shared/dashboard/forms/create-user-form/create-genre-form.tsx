@@ -4,10 +4,10 @@ import React from 'react';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { FormInput } from '@/components/shared/form/form-input';
+import { FormInput } from '@/shared/components/shared';
 import type { User, UserRole } from '@prisma/client';
 import { CreateUserFormSchema, CreateUserFormValues } from './constants';
-import { Button } from '@/components/ui/button';
+import { Button } from '@/shared/components';
 import { useRouter, useParams } from 'next/navigation';
 import { createUser, updateUser } from '@/app/actions';
 import toast from 'react-hot-toast';

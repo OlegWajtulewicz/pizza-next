@@ -50,18 +50,18 @@ export const authOptions: AuthOptions = {
                     console.error("User not found");
                     return null;
                 }
-
+                console.log('User found:', findUser);
                 const isPasswordValid = await compare(credentials.password, findUser.password);
                 if (!isPasswordValid) {
                     console.error("Invalid password");
                     return null;
                 }
-
+                console.log('Password entered:', credentials.password);
                 if (!findUser.verified) {
                     console.error("User is not verified");
                     return null;
                 }
-
+                console.log('Is password valid:', isPasswordValid);
                 return {
                     id: findUser.id,
                     email: findUser.email,

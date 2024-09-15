@@ -4,7 +4,7 @@ import React from "react";
 import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { FormInput } from "@/components/shared/form/form-input";
+
 import { useRouter, useParams } from "next/navigation";
 import {
   createIngredient,
@@ -19,14 +19,15 @@ import { DashboardFormHeader } from "../../dashboard-form-header";
 import {
   CreateProductFormSchema,
   CreateProductFormValues,
-} from "@/components/shared/dashboard/forms/create-product-form/constants";
+} from "@/shared/components/shared/dashboard/forms/create-product-form/constants";
 import { Ingredient, Product } from "@prisma/client";
 import { Trash2 } from "lucide-react";
-import { UploadButton } from "@/lib/uploadthing";
+import { UploadButton } from "@/shared/lib/uploadthing";
 import {
   CreateIngredientFormSchema,
   CreateIngredientFormValues,
-} from "@/components/shared/dashboard/forms/create-ingredient-form/constants";
+} from "@/shared/components/shared/dashboard/forms/create-ingredient-form/constants";
+import { FormInput } from "../../../form-components/form-input";
 
 interface Props {
   values?: Ingredient;
@@ -58,7 +59,7 @@ export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
       if (params.id) {
         await updateIngredient(+params.id, fields);
       } else {
-        await createIngredient(fields);
+      //  await createIngredient(fields);
         router.push("/dashboard/ingredients");
       }
 
@@ -95,7 +96,7 @@ export const CreateIngredientForm: React.FC<Props> = ({ values }) => {
     <FormProvider {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <DashboardFormHeader isEdit={!!values} loading={loading} />
-        <div className="flex items-center border shadow-sm rounded-lg grid grid-cols-2 gap-5 p-5">
+        <div className=" items-center border shadow-sm rounded-lg grid grid-cols-2 gap-5 p-5">
           <div>
             <FormInput name="name" label="Название" required />
             <FormInput name="price" label="Цена" required />

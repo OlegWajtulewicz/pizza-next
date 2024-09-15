@@ -269,7 +269,7 @@ async function up() {
   await prisma.ingredient.createMany({
     data: ingredients,
   });
-
+// https://media.dodostatic.net/image/r:233x233/11EE7D610CF7E265B7C72BE5AE757CA7.webp
   const pizza1 = await prisma.product.create({
     data: {
       name: 'Пепперони фреш',

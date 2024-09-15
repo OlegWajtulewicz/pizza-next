@@ -4,13 +4,13 @@ import React from 'react';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 
-import { FormInput } from '@/components/shared/form/form-input';
 import type { Category } from '@prisma/client';
 import { CreateCategoryFormSchema, CreateCategoryFormValues } from './constants';
 import { useParams, useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import { createCategory, updateCategory } from '@/app/actions';
 import { DashboardFormHeader } from '../../dashboard-form-header';
+import { FormInput } from '@/shared/components';
 
 interface Props {
   values?: Category;
