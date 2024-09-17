@@ -347,14 +347,6 @@ export async function updateUserInfo(body: Prisma.UserCreateInput) {
 
 
 
-
-
-
-
-
-
-
-
 /* Dashboard Actions */
 
 export async function updateUser(id: number, data: Prisma.UserUpdateInput) {
@@ -534,6 +526,18 @@ export async function updateUser(id: number, data: Prisma.UserUpdateInput) {
       throw error;
     }
   }
+
+  // export const updateProductItem = async (id: number, data: {
+  //   price: number;
+  //   size?: number | null;
+  //   pizzaType?: number | null;
+  //   product: { connect: { id: number } };
+  // }) => {
+  //   return prisma.productItem.update({
+  //     where: { id },
+  //     data,
+  //   });
+  // };
   
   export async function createProductItem(data: Prisma.ProductItemUncheckedCreateInput) {
     try {
@@ -567,3 +571,74 @@ export async function updateUser(id: number, data: Prisma.UserUpdateInput) {
       throw error;
     }
   }
+
+// ? Добавление ингредиентов к продукту (Product ↔ Ingredient)
+
+//import prisma from '@/lib/prisma';
+
+export async function addIngredientToProduct(productId: number, ingredientIds: number[]) {
+  await prisma.product.update({
+    where: {
+      id: productId,
+    },
+    data: {
+      ingredients: {
+        connect: ingredientIds.map((id) => ({ id })),
+      },
+    },
+  });
+}
+
+// ?  Добавление ингредиентов к элементу корзины (CartItem ↔ Ingredient)
+//import prisma from '@/lib/prisma';
+
+async function addIngredientToCartItem(cartItemId: number, ingredientIds: number[]) {
+  await prisma.cartItem.update({
+    where: {
+      id: cartItemId,
+    },
+    data: {
+      ingredients: {
+        connect: ingredientIds.map((id) => ({ id })),
+      },
+    },
+  });
+} 
+
+//*  
+  /**
+   ** Пример API для создания связей
+Если вы создаете API для работы с этими связями, ваше обращение будет выглядеть так:
+
+POST /api/product/:id/ingredients — добавление ингредиентов к продукту
+POST /api/cart-item/:id/ingredients — добавление ингредиентов к элементу корзины
+Пример API-роута для добавления ингредиентов к продукту:
+
+
+import { NextApiRequest, NextApiResponse } from 'next';
+import prisma from '@/lib/prisma';
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'POST') {
+    const { id } = req.query; // id продукта
+    const { ingredientIds } = req.body; // список ингредиентов
+
+    try {
+      await prisma.product.update({
+        where: { id: Number(id) },
+        data: {
+          ingredients: {
+            connect: ingredientIds.map((id: number) => ({ id })),
+          },
+        },
+      });
+      res.status(200).json({ message: 'Ingredients added to product' });
+    } catch (error) {
+      res.status(500).json({ error: 'Error adding ingredients' });
+    }
+  } else {
+    res.status(405).json({ message: 'Method not allowed' });
+  }
+}
+   */
+  

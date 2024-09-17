@@ -37,6 +37,7 @@ export const Stories: React.FC<Props> = ({ className }) => {
 
   return (
     <>
+    <div className="relative w-[100%]">
       <Container className={cn('overflow-hidden my-10', className)}>
         <div className="relative h-auto w-full opacity-1 overflow-hidden ">
           <div className="w-full overflow-auto scrollbar scrollbar-height-1  pb-2 cursor-grab">
@@ -62,6 +63,7 @@ export const Stories: React.FC<Props> = ({ className }) => {
         </div>
         
       </Container>
+      </div>
       {open && (
         <div className="absolute left-0 top-0 w-full h-full bg-black/80 flex items-center justify-center z-50">
           <div className="relative z-50" style={{ width: 520 }}>

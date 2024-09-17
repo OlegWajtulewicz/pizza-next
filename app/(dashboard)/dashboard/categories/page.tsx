@@ -32,6 +32,10 @@ export default function DashboardCategories() {
   };
 
   const handleCreateCategory = async () => {
+    if (!newCategory.name) {
+      toast.error('Заполните все обязательные поля!');
+      return; 
+    }
     try {
       await createCategory(newCategory); 
       toast.success('Категория создана');
@@ -88,22 +92,23 @@ export default function DashboardCategories() {
       <h1 className="text-2xl font-bold mb-4">Управление категориями</h1>
 
       {/* Форма создания/обновления категории */}
-      <div className="mb-6">
+      <div className="mb-12">
         <h2 className="text-xl font-bold mb-4">
           {editingCategoryId ? 'Обновить категорию' : 'Создать новую категорию'}
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Input 
+            className="h-12"
             value={newCategory.name}
             onChange={(e) => setNewCategory({ name: e.target.value })}
             placeholder="Название категории"
           />
           <div className="flex gap-2">
-            <Button className='h-9' onClick={handleSaveCategory}>
+            <Button className='h-12 w-full' loading={loading} onClick={handleSaveCategory}>
               {editingCategoryId ? 'Сохранить' : 'Создать'}
             </Button>
             {editingCategoryId && (
-            <Button className='h-9 ' onClick={handleCancelEdit}>
+            <Button className='h-12 w-full' loading={loading} onClick={handleCancelEdit}>
               Отменить
             </Button>
             )}
@@ -129,8 +134,8 @@ export default function DashboardCategories() {
           <tbody>
             {categories.map((category) => (
               <tr key={category.id}>
-                <td>{category.id}</td>
-                <td>{category.name}</td>
+                <td className='text-center'>{category.id}</td>
+                <td className='text-center'>{category.name}</td>
                 <td>
                   {category.products.length > 0
                     ? category.products.map((product) => (
@@ -138,10 +143,10 @@ export default function DashboardCategories() {
                       ))
                     : 'Нет продуктов'}
                 </td>
-                <td>{new Date(category.createdAt).toLocaleDateString()}</td>
-                <td>{new Date(category.updatedAt).toLocaleDateString()}</td>
+                <td className='text-center'>{new Date(category.createdAt).toLocaleDateString()}</td>
+                <td className='text-center'>{new Date(category.updatedAt).toLocaleDateString()}</td>
                 <td className="border-none text-center">
-                  <div className="flex gap-1 justify-center flex-col flex-wrap h-full">
+                  <div className="flex gap-1 justify-center flex-col flex-wrap h-full ">
                     <Button
                       className="h-[1.7rem]"
                       onClick={() => {

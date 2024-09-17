@@ -22,7 +22,7 @@ export const ProductCard: React.FC<Props> = ({ id, name, price, imageUrl, ingred
       <div className='h-full flex flex-col justify-between gap-4'>
         <div>
             <div className="flex justify-center items-center p-6 bg-secondary rounded-lg h-[260px]">
-              <img className="object-contain w-[100%] h-[100%]" src={imageUrl} alt="Logo" />
+              <img className="object-contain w-[100%] h-[100%] skale" src={imageUrl} alt="Logo" />
             </div>
 
             <Title text={name} size="sm" className="mb-1 mt-3 font-bold" />

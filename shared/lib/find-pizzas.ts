@@ -8,10 +8,15 @@ export interface GetSearchParams {
     ingredients?: string;
     priceFrom?: string;
     priceTo?: string;
+    limit?: string;
+    page?: string;
 }
 
 const DEFAULT_MIN_PRICE = 0;
 const DEFAULT_MAX_PRICE = 1000;
+
+const DEFAULT_LIMIT = 12;
+const DEFAULT_PAGE = 1;
 
 
 export const findPizzas = async (params: GetSearchParams) =>  {
@@ -22,10 +27,10 @@ export const findPizzas = async (params: GetSearchParams) =>  {
     const minPrice = Number(params.priceFrom) || DEFAULT_MIN_PRICE;
     const maxPrice = Number(params.priceTo) || DEFAULT_MAX_PRICE;
 
-    // const limit = Number(params.limit || DEFAULT_LIMIT);
-    // const page = Number(params.page || DEFAULT_PAGE);
+     const limit = Number(params.limit || DEFAULT_LIMIT);
+     const page = Number(params.page || DEFAULT_PAGE);
 // * Фильтрация товаров по стоимости, типу и ингредиентам
-    const categories = await prisma.category.findMany({
+    const categories = await prisma.category.paginate({
         include: {
           products: {
             orderBy: {
@@ -71,7 +76,12 @@ export const findPizzas = async (params: GetSearchParams) =>  {
             }
           }
         }
-      });
+      })
+      .withPages({
+        page,
+        limit,
+        includePageCount: true,
+      });;
 
 
     return categories;

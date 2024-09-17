@@ -21,7 +21,7 @@ const DashboardIngredients = () => {
   const [ingredients, setIngredients] = useState<Ingredient[]>([]);
   const [loading, setLoading] = useState(false);
   const [editingIngredientId, setEditingIngredientId] = useState<number | null>(null);
-  const [error, setError] = useState(null);
+  
 
   const form = useForm<CreateIngredientFormValues>({
     defaultValues: {
@@ -36,8 +36,9 @@ const DashboardIngredients = () => {
   const params = useParams<{ id: string }>();
 
   useEffect(() => {
+    setLoading(true);
     const fetchIngredients = async () => {
-      setLoading(true);
+      
       try {
         const response = await fetch('/api/ingredients');
         const data = await response.json();
@@ -53,6 +54,10 @@ const DashboardIngredients = () => {
   }, []);
 
   const handleCreateIngredient: SubmitHandler<CreateIngredientFormValues> = async (data) => {
+    if (!data.name || !data.price || !data.imageUrl) {
+      toast.error('Заполните все обязательные поля!');
+      return; 
+    }
     try {
       const fields = { ...data, price: Number(data.price) };
 
@@ -76,8 +81,8 @@ const DashboardIngredients = () => {
 
   const handleCancelEdit = () => {
     form.reset();
-    setEditingIngredientId(null); // Сбрасываем состояние редактирования
-    router.push('/dashboard/ingredients'); // Обновляем маршрут, убирая параметр id
+    setEditingIngredientId(null); 
+    router.push('/dashboard/ingredients'); 
   };
 
   const onUploadSuccess = (url: string) => {
@@ -113,26 +118,23 @@ const DashboardIngredients = () => {
 
       <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(handleCreateIngredient)}>
-          <div className=" mb-6">
+          <div className=" mb-12">
             <h2 className="text-xl font-bold mb-4">
               {params.id ? 'Редактировать ингредиент' : 'Создать новый ингредиент'}
             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Input
-                className="h-9"
-                
+                className="h-12"
                 placeholder="Название ингредиента"
-                required
                 {...form.register('name')}
               />
               <Input
-                className="h-9"
+                className="h-12"
                 placeholder="Цена ингредиента"
-                required
                 {...form.register('price')}
               />
               <Input
-                className="h-9"
+                className="h-12"
                 value={imageUrl}
                 onChange={(e) => form.setValue('imageUrl', e.target.value)}
                 placeholder="URL изображения"
@@ -143,6 +145,7 @@ const DashboardIngredients = () => {
                     <img className="object-cover rounded" src={imageUrl} alt="Изображение" />
                 </div>
                   <Button
+                    type='button'
                     onClick={onClickRemoveImage}
                     className="absolute top-2 right-2 bg-red-600 rounded-sm p-2"
                   >
@@ -153,7 +156,7 @@ const DashboardIngredients = () => {
                 <div>
                   <UploadButton
                     className={cn(
-                      'border rounded-md block color-black border-gray-200 h-9 opacity-100 text-opacity-100 text-center mb-2'
+                      'border rounded-md h-12 color-black border-gray-200 opacity-100 text-opacity-100 text-center mb-2'
                     )}
                     endpoint="imageUploader"
                     onClientUploadComplete={(res) => onUploadSuccess(res[0].url)}
@@ -167,11 +170,11 @@ const DashboardIngredients = () => {
                 </div>
               )}
               <div className="flex flex-col gap-2">
-                <Button type="submit" className="h-9">
+                <Button type="submit" loading={loading} className="h-12">
                   {params.id ? 'Сохранить изменения' : 'Создать'}
                 </Button>
                 {params.id && (
-                  <Button type="button" onClick={handleCancelEdit} className="h-9">
+                  <Button type="button" loading={loading} onClick={handleCancelEdit} className="h-12">
                     Отменить
                   </Button>
                 )}
@@ -199,16 +202,16 @@ const DashboardIngredients = () => {
           <tbody>
             {ingredients.map((ingredient) => (
               <tr key={ingredient.id}>
-                <td>{ingredient.id}</td>
+                <td className='text-center'>{ingredient.id}</td>
                 <td>{ingredient.name}</td>
-                <td>{ingredient.price} ₽</td>
+                <td className='text-center'>{ingredient.price} ₽</td>
                 <td className="items-center flex justify-center border-none">
                   {ingredient.imageUrl && (
                     <img src={ingredient.imageUrl} alt={ingredient.name} className="w-16 h-16 object-cover" />
                   )}
                 </td>
-                <td>{new Date(ingredient.createdAt).toLocaleDateString()}</td>
-                <td>{new Date(ingredient.updatedAt).toLocaleDateString()}</td>
+                <td className='text-center'>{new Date(ingredient.createdAt).toLocaleDateString()}</td>
+                <td className='text-center'>{new Date(ingredient.updatedAt).toLocaleDateString()}</td>
                 <td className="text-center">
                   <div className="flex gap-1 justify-center flex-col flex-wrap h-full">
                     <Button

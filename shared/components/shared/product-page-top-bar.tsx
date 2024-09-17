@@ -32,7 +32,7 @@ export default function ProductPageTopBar({ categories }: ProductPageTopBarProps
         categories={categories}  
         className={cn(
           'transition-all',
-          !cartVisible ? 'w-full p-0 opacity-0 h-0 left-0 py-2 top-[-100%]' : 'opacity-100 py-2 w-full ml-0 top-0'
+          !cartVisible ? 'w-full p-0 opacity-0 absolute h-0 left-0 py-2 top-[-100%]' : 'opacity-100 py-2 w-full ml-0 top-0'
         )}     
         />
   );

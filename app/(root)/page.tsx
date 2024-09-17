@@ -2,10 +2,11 @@ import { ProductsGroupList } from "@/shared/components/shared/products-group-lis
 import { Title, Container, TopBar, Filters, Stories } from "../../shared/components/shared";
 import { Suspense } from "react";
 import { findPizzas, GetSearchParams } from "@/shared/lib/find-pizzas";
+import { Pagination } from "@/shared/components/shared/pagination";
 
 
 export default async function Home({ searchParams } : { searchParams: GetSearchParams }) {
-  const categories = await findPizzas(searchParams);
+  const [categoryProducts, meta] = await findPizzas(searchParams);
   
   return (
     <>
@@ -13,7 +14,7 @@ export default async function Home({ searchParams } : { searchParams: GetSearchP
         <Title text="Все пиццы" size="lg" className="font-extrabold" />
 
      </Container>
-     <TopBar categories={categories.filter((category) => category.products.length > 0)}  />
+     <TopBar categories={categoryProducts.filter((category) => category.products.length > 0)}  />
       <Stories/>
      <Container className="pb-14 mt-10" >
      <div className="flex gap-[60px]">
@@ -22,17 +23,22 @@ export default async function Home({ searchParams } : { searchParams: GetSearchP
         </div>
         <div className="flex-1">
           <div className="flex flex-col gap-16">
-            {categories.map(
+            {categoryProducts.map(
               (category) =>
                 category.products.length > 0 && (
                   <ProductsGroupList
                     key={category.id}
                     title={category.name}
                     categoryId={category.id}
-                    items={category.products} products={[]}                  
+                    items={category.products} 
+                    products={category.products}                  
                      />
                 ),
             )}
+          </div>
+          <div className="flex items-center gap-6 mt-12">
+              <Pagination pageCount={meta.pageCount} currentPage={meta.currentPage} />
+              <span className="text-sm text-gray-400">5 из 65</span>
           </div>
         </div>
      </div>

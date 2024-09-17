@@ -47,7 +47,8 @@ export default function CheckoutPage() {
         if (session) {
             fetchUserInfo();
             }
-        }, [session]);
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [session ]);
 
         const { vatPrice, deliveryPrice, totalPrice } = calculatePrices(totalAmount);
 

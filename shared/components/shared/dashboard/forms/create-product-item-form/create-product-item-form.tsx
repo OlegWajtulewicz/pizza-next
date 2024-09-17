@@ -47,7 +47,7 @@ export const CreateProductItemForm: React.FC<Props> = ({ values, products }) => 
       };
 
       if (params.id) {
-        await updateProductItem(+params.id, fields);
+       // await updateProductItem(+params.id, fields);
       } else {
         await createProductItem(fields);
         router.push('/dashboard/product-items');

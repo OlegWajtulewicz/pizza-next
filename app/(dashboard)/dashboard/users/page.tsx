@@ -17,6 +17,7 @@ const roles = Object.values(UserRole);
 
 export default function DashboardUsers() {
   const [users, setUsers] = useState<User[]>([]);
+  const [loading, setLoading] = React.useState(false);
   const [newUser, setNewUser] = useState({
     fullName: '',
     email: '',
@@ -25,16 +26,23 @@ export default function DashboardUsers() {
   });
 
   const fetchUsers = async () => {
+    setLoading(true);
     try {
       const response = await fetch('/api/users');
       const data = await response.json();
       setUsers(data);
     } catch (error) {
       toast.error('Не удалось загрузить пользователей');
+    } finally {
+      setLoading(false);
     }
   };
 
   const handleCreateUser = async () => {
+    if (!newUser.fullName || !newUser.email || !newUser.password) {
+      toast.error('Заполните все обязательные поля!');
+      return; 
+    }
     try {
       await createUser({
         ...newUser,
@@ -50,9 +58,12 @@ export default function DashboardUsers() {
 
   const handleDeleteUser = async (id: number) => {
     try {
-      await deleteUser(id);
-      toast.success('Пользователь удалён');
-      fetchUsers();
+      if (confirm('Вы уверены, что хотите удалить пользователя?')) {
+        await deleteUser(id);
+        toast.success('Пользователь удалён');
+        fetchUsers();
+      }
+      
     } catch (error) {
       toast.error('Ошибка удаления пользователя');
     }
@@ -73,24 +84,30 @@ export default function DashboardUsers() {
       <h1 className="text-2xl font-bold mb-4">Управление пользователями</h1>
       
       {/* Форма создания нового пользователя */}
-      <div className="mb-6">
+      <div className="mb-12">
         <h2 className="text-xl font-bold mb-4">Создать нового пользователя</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <Input 
+            className="h-12"
             value={newUser.fullName}
             onChange={(e) => setNewUser({ ...newUser, fullName: e.target.value })}
             placeholder="Полное имя"
+            required
           />
           <Input 
+            className="h-12"
             value={newUser.email}
             onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
             placeholder="E-mail"
+            required
           />
           <Input 
+            className="h-12"
             type="password"
             value={newUser.password}
             onChange={(e) => setNewUser({ ...newUser, password: e.target.value })}
             placeholder="Пароль"
+            required
           />
           <select
             value={newUser.role}
@@ -103,7 +120,7 @@ export default function DashboardUsers() {
               </option>
             ))}
           </select>
-          <Button className='h-9' onClick={handleCreateUser}>Создать</Button>
+          <Button className='h-12' loading={loading} onClick={handleCreateUser}>Создать</Button>
         </div>
       </div>
 
@@ -121,11 +138,11 @@ export default function DashboardUsers() {
         <tbody>
           {users.map((user) => (
             <tr key={user.id}>
-              <td>{user.id}</td>
-              <td>{user.fullName}</td>
+              <td className="text-center">{user.id}</td>
+              <td className="text-center">{user.fullName}</td>
               <td>{user.email}</td>
-              <td>{user.role}</td>
-              <td className='text-center'>
+              <td className="text-center">{user.role}</td>
+              <td className='text-center p-2'>
                 <Button className="h-[1.7rem]" onClick={() => handleDeleteUser(user.id)}>Удалить</Button>
               </td>
             </tr>

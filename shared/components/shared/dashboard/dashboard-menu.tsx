@@ -55,7 +55,7 @@ export const DashboardMenu: React.FC<Props> = ({ className }) => {
   const pathname = usePathname();
 
   return (
-    <nav className={cn('grid items-start px-4 font-medium text-sm', className)}>
+    <nav className={cn('grid items-start px-4 font-medium text-sm sticky top-4', className)}>
       {items.map((item) => (
         <Link
           key={item.text}
