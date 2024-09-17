@@ -34,8 +34,10 @@ interface ProductItem {
   size: number | null;
   pizzaType: number | null;
   productId: number;
-  createdAt: Date;
-  updatedAt: Date;
+ // createdAt: Date;
+ // updatedAt: Date;
+createdAt: string;
+  updatedAt: string;
   name: string; 
 }
 
@@ -96,14 +98,14 @@ export default function DashboardProductItems({ values }: Props) {
     resolver: zodResolver(CreateProductItemFormSchema),
   });
 
-  useEffect(() => {
-    form.reset({
-      price: '',
-      size: '',
-      pizzaType: '',
-      productId: '',
-    });
-  }, [values, form]);
+//   useEffect(() => {
+//     form.reset({
+//       price: '',
+//       size: '',
+//       pizzaType: '',
+//       productId: '',
+//     });
+//   }, [values, form]);
 
   const onSubmit = async (data: CreateProductItemFormValues) => {
     try {
@@ -136,7 +138,7 @@ export default function DashboardProductItems({ values }: Props) {
     form.setValue('size', String(item.size || ''));
     form.setValue('pizzaType', String(item.pizzaType || ''));
     form.setValue('productId', String(item.productId));
-    params.id = String(item.id);
+     params.id = String(item.id);
     setIsEdit(true);
   };
 
@@ -171,12 +173,15 @@ export default function DashboardProductItems({ values }: Props) {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <FormInput
                 name="price"
+                value={form.watch('price')}
                 label="Цена"
                 required
                 type="number"
                 step="0.01"
-                placeholder="Цена" />
+                placeholder="Цена" 
+                />
               <FormSelect
+                value={form.watch('size')}
                 name="size"
                 label="Размер продукта"
                 placeholder="Размер..."
@@ -197,6 +202,7 @@ export default function DashboardProductItems({ values }: Props) {
                 />
               <FormSelect
                 name="pizzaType"
+                value={form.watch('pizzaType')}
                 label="Тип продукта"
                 placeholder="Тип..." 
                 items={[
@@ -212,6 +218,7 @@ export default function DashboardProductItems({ values }: Props) {
                 />
               <FormSelect
                 name="productId"
+                value={form.watch('productId')}
                 label="Продукт"
                 placeholder="Выберите продукт..."
                 items={products.map((product) => ({

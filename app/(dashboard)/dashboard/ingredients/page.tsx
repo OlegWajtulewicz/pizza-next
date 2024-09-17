@@ -125,11 +125,13 @@ const DashboardIngredients = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
               <Input
                 className="h-12"
+                value={form.watch('name')}
                 placeholder="Название ингредиента"
                 {...form.register('name')}
               />
               <Input
                 className="h-12"
+                value={form.watch('price')}
                 placeholder="Цена ингредиента"
                 {...form.register('price')}
               />
