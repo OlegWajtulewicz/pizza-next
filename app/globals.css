@@ -124,6 +124,9 @@ html {
       }
     }
   }
+  .z51 {
+    z-index: 51;
+  }
   .tbstck {
     content: "";
     position: absolute;

@@ -26,20 +26,21 @@ export default async function Home({ searchParams } : { searchParams: GetSearchP
             {categoryProducts.map(
               (category) =>
                 category.products.length > 0 && (
-                  <ProductsGroupList
+                  <><ProductsGroupList
                     key={category.id}
                     title={category.name}
                     categoryId={category.id}
-                    items={category.products} 
-                    products={category.products}                  
-                     />
+                    items={category.products}
+                    products={category.products} />
+                    <div className="flex items-center gap-6 mt-12">
+                      <Pagination pageCount={meta.pageCount} currentPage={meta.currentPage} />
+                      <span className="text-sm text-gray-400">5 из 65</span>
+                    </div></>
                 ),
             )}
+            
           </div>
-          <div className="flex items-center gap-6 mt-12">
-              <Pagination pageCount={meta.pageCount} currentPage={meta.currentPage} />
-              <span className="text-sm text-gray-400">5 из 65</span>
-          </div>
+          
         </div>
      </div>
      </Container>

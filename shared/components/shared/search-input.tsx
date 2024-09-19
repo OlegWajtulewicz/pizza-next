@@ -40,10 +40,10 @@ export const SearchInput = () => {
 
   return (
     <>
-      {focused && <div className="fixed top-0 left-0 bottom-0 right-0 bg-black/50 z-30" />}
+      {focused && <div className="fixed top-0 left-0 bottom-0 right-0 bg-black/50 z51" />}
       <div
         ref={ref}
-        className={cn('flex rounded-md flex-1 justify-between relative h-11', focused && 'z-30')}>
+        className={cn('flex rounded-md flex-1 justify-between relative h-11', focused && 'z51')}>
         <Search className="absolute top-1/2 translate-y-[-50%] left-3 h-5 text-gray-400" />
 
         <input
@@ -58,7 +58,7 @@ export const SearchInput = () => {
          {products.length > 0 && (  
           <div
             className={cn(
-              'absolute w-full bg-white rounded-md py-2 top-14 shadow-md transition-all duration-200 invisible opacity-0 z-30',
+              'absolute w-full bg-white rounded-md py-2 top-14 shadow-md transition-all duration-200 invisible opacity-0 z51',
               focused && 'visible opacity-100 top-12',
             )}>
               

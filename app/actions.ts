@@ -513,20 +513,86 @@ export async function updateUser(id: number, data: Prisma.UserUpdateInput) {
     }
   }
   
-  export async function updateProductItem(id: number, data: Prisma.ProductItemUpdateInput) {
-    try {
-      await prisma.productItem.update({
-        where: {
-          id,
-        },
-        data,
-      });
-    } catch (error) {
-      console.log('Error [UPDATE_PRODUCT_ITEM]', error);
-      throw error;
-    }
-  }
+  // export async function updateProductItem(id: number, data: Prisma.ProductItemUpdateInput) {
+  //   try {
+  //     await prisma.productItem.update({
+  //       where: {
+  //         id,
+  //       },
+  //       data,
+  //     });
+  //   } catch (error) {
+  //     console.log('Error [UPDATE_PRODUCT_ITEM]', error);
+  //     throw error;
+  //   }
+  // }
 
+  export const updateProductItem = async (id: number, data: Prisma.ProductItemUpdateInput) => {
+    console.log('Отправляемые данные для обновления:', data);
+
+    
+    const response = await fetch(`/api/product-item/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+  
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Ошибка при обновлении товара: ${errorText}`);
+    }
+  
+    const result = await response.json();
+    console.log('Ответ от сервера после обновления:', result);
+    return result;
+};
+
+  // const validateData = (data: Prisma.ProductItemUpdateInput) => {
+  //   if (typeof data.price !== 'number' || isNaN(data.price)) {
+  //     throw new Error('Цена должна быть числом.');
+  //   }
+  //   // Добавьте другие проверки по необходимости
+  // };
+  
+  // export const updateProductItem = async (id: number, data: Prisma.ProductItemUpdateInput) => {
+  //   validateData(data);
+  //   const response = await fetch(`/api/product-item/${id}`, {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(data),
+  //   });
+  
+  //   if (!response.ok) {
+  //     const errorText = await response.text();
+  //     throw new Error(`Ошибка при обновлении товара: ${errorText}`);
+  //   }
+  
+  //   return response.json();
+  // };
+  
+  
+
+  // export const updateProductItem = async (id: number, data: Prisma.ProductItemUpdateInput) => {
+  //   const response = await fetch(`/api/product-item/${id}`, {
+  //     method: 'PUT',
+  //     headers: {
+  //       'Content-Type': 'application/json',
+  //     },
+  //     body: JSON.stringify(data),
+  //   });
+  
+  //   if (!response.ok) {
+  //     throw new Error('Ошибка при обновлении товара');
+  //   }
+  
+  //   return response.json();
+  // };
+  
+  
   // export const updateProductItem = async (id: number, data: {
   //   price: number;
   //   size?: number | null;
