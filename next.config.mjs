@@ -9,7 +9,7 @@ const nextConfig = {
     // Dangerously allow production builds to successfully complete even if
     // your project has type errors.
     // !! WARN !!
-      ignoreBuildErrors: true, // Добавьте эту строку для игнорирования ошибок TypeScript
+     // ignoreBuildErrors: true, // Добавьте эту строку для игнорирования ошибок TypeScript
     },
 };
 

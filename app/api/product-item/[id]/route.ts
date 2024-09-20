@@ -16,7 +16,7 @@ export async function PUT(request: NextRequest) {
           price: data.price,
           size: data.size,
           pizzaType: data.pizzaType,
-          product: { connect: { id: Number(data.productId) } },
+          productId: data.productId,
         },
       });
 
@@ -31,46 +31,7 @@ export async function PUT(request: NextRequest) {
   }
 }
 
-// export async function PUT(request: NextRequest) {
-//   const id = request.nextUrl?.pathname?.split('/').pop() || '';
-//   const data = await request.json();
 
-//   const numericId = parseInt(id, 10);
-
-//   try {
-//     const updatedProductItem = await prisma.productItem.update({
-//       where: { id: numericId },
-//       data: {
-//         price: data.price,
-//         size: data.size,
-//         pizzaType: data.pizzaType,
-//         product: {
-//           connect: { id: Number(data.productId) }
-//         }
-//       }
-//     });
-
-//     return NextResponse.json(updatedProductItem);
-//   } catch (error) {
-//     return NextResponse.json({ error: 'Ошибка при обновлении товара.' }, { status: 500 });
-//   }
-// }
-
-export async function DELETE(request: NextRequest) {
-  const id = request.nextUrl?.pathname?.split('/').pop() || '';
-
-  const numericId = parseInt(id, 10);
-
-  try {
-    await prisma.productItem.delete({
-      where: { id: numericId }
-    });
-
-    return NextResponse.json({ message: 'Товар успешно удалён' });
-  } catch (error) {
-    return NextResponse.json({ error: 'Ошибка при удалении товара.' }, { status: 500 });
-  }
-}
 
 export async function GET(request: NextRequest) {
   const id = request.nextUrl?.pathname?.split('/').pop();

@@ -10,7 +10,7 @@ import { Button, Input } from '@/shared/components/ui';
 import CategorySelect from '@/shared/components/shared/category-select';
 import { Category, Product } from '@prisma/client';
 import { cn } from '@/shared/lib/utils';
-import { CreateProductFormSchema, CreateProductFormValues } from '@/shared/components/shared/dashboard/forms/create-product-form/constants';
+import { CreateProductFormSchema  } from '@/shared/components/shared/dashboard/forms/create-product-form/constants';
 import { useRouter } from 'next/navigation';
 import { Trash2 } from 'lucide-react';
 
@@ -19,6 +19,11 @@ interface ProductWithCategory extends Product {
   className?: string;
 }
 
+type CreateProductFormValues = {
+  name: string; 
+  category: string;
+  imageUrl: string;
+};
 
 const DashboardProducts = () => {
   const [products, setProducts] = useState<ProductWithCategory[]>([]);
@@ -30,8 +35,8 @@ const DashboardProducts = () => {
   const form = useForm<CreateProductFormValues>({
     defaultValues: {
       name: '',
-      imageUrl: '',
       category: '',
+      imageUrl: '',
     },
     resolver: zodResolver(CreateProductFormSchema),
   });
@@ -163,14 +168,13 @@ const DashboardProducts = () => {
               value={form.watch('name')}
               placeholder="Название продукта"
               {...form.register('name')}
-              onChange={(e) => form.setValue('imageUrl', e.target.value)}
-              
             />
             <Input
               className="h-12"
-              value={imageUrl}
+              value={form.watch('imageUrl')}
               placeholder="URL изображения"
               {...form.register('imageUrl')}
+              onChange={(e) => form.setValue('imageUrl', e.target.value)}
             />
             {imageUrl ? (
                 <div className="relative border-gray-200 border rounded-md">

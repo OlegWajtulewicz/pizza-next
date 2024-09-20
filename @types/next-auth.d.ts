@@ -26,3 +26,13 @@ declare module 'next-auth/jwt' {
     role: UserRole;
   }
 }
+
+//////////////////////////////////////////////////////////////////////////
+export type ProductItemUpdateInput = {
+  price?: number;
+  size?: number | null;
+  pizzaType?: number | null;
+  productId?: number | null;
+  // Добавьте другие свойства, если это необходимо
+};
+/////////////////////////////////////////////////////////////////////

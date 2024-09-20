@@ -66,6 +66,7 @@ const DashboardIngredients = () => {
       } else {
         await createIngredient({
           ...fields,
+          name: fields.name || '',
           imageUrl: fields.imageUrl || '',
         });
         router.push('/dashboard/ingredients');

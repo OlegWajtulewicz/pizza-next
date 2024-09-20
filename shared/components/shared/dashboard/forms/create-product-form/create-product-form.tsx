@@ -8,9 +8,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useParams } from "next/navigation";
 import {
   createProduct,
-  createUser,
   updateProduct,
-  updateUser,
 } from "@/app/actions";
 import toast from "react-hot-toast";
 import { DashboardFormHeader } from "../../dashboard-form-header";
@@ -25,6 +23,7 @@ import { UploadButton } from "@/shared/lib/uploadthing";
 interface Props {
   values?: Product;
 }
+
 
 export const CreateProductForm: React.FC<Props> = ({ values }) => {
   const params = useParams<{ id: string }>();
@@ -45,7 +44,8 @@ export const CreateProductForm: React.FC<Props> = ({ values }) => {
       setLoading(true);
 
       const fields = {
-        ...data,
+        name: data.name,
+        imageUrl: data.imageUrl,
         category: { connect: { id: Number(data.category) } },
       };
 

@@ -6,242 +6,78 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useParams, useRouter } from 'next/navigation';
 import { CreateProductItemFormSchema, CreateProductItemFormValues } from '@/shared/components/shared/dashboard/forms/create-product-item-form/constants';
 import ProductItemForm from '@/shared/components/shared/dashboard/forms/create-product-item-form/product-item-form-create';
+import toast from 'react-hot-toast';
 
-interface PageProps {
-    values?: ProductItem;
-    products: Product[];
-}
-interface Props extends PageProps {
-    config?: {};
-    values?: ProductItem;
-    products: Product[]; 
-    
-  }
 
 
 interface Product {
   id: number;
   name: string;
-  price: number;
   imageUrl: string;
   categoryId: number;
-  size: number | null;
-  pizzaType: number | null;
-  productId: number;
   createdAt: Date;
   updatedAt: Date;
 }
 
-interface ProductItem {
-  id: number;
-  price: number;
-  size: number | null;
-  pizzaType: number | null;
-  productId: number;
-  createdAt: string;
-  updatedAt: string;
-  name: string; 
-  // createdAt: Date;
- // updatedAt: Date;
-}
 
-export default function DashboardProductItems({ values  }: Props) {
-  const params = useParams<{ id: string }>();
-  const router = useRouter();
-  const [loading, setLoading] = React.useState(false);
-  const [isEdit, setIsEdit] = useState(false); 
-  const [productItems, setProductItems] = useState<ProductItem[]>([]);
+
+export default function DashboardProductItems() {
+  const { id } = useParams<{ id: string }>();
+  const [isEdit, setIsEdit] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
 
-  // useEffect(() => {
-  //   const fetchProductItems = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const response = await fetch('/api/product-item');
-  //       if (!response.ok) {
-  //         throw new Error(`Ошибка при получении данных: ${response.statusText}`);
-  //       }
-  //       const data: ProductItem[] = await response.json();
-  //       setProductItems(data);
-  //     } catch (error) {
-  //       console.error('Ошибка при запросе:', error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
 
-  //   fetchProductItems();
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchProducts = async () => {
-  //     try {
-  //       const response = await fetch('/api/products');
-  //       if (!response.ok) {
-  //         throw new Error(`Ошибка при получении данных: ${response.statusText}`);
-  //       }
-  //       const data: Product[] = await response.json();
-  //       setProducts(data);
-  //     } catch (error) {
-  //       console.error('Ошибка загрузки продуктов:', error);
-  //     }
-  //   };
-
-  //   fetchProducts();
-  // }, []);
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLoading(true);
-  //     try {
-  //       // Выполняем оба запроса параллельно
-  //       const [productItemsResponse, productsResponse] = await Promise.all([
-  //         fetch('/api/product-item'),
-  //         fetch('/api/products')
-  //       ]);
-
-  //       if (!productItemsResponse.ok || !productsResponse.ok) {
-  //         throw new Error('Ошибка при получении данных');
-  //       }
-
-  //       const productItemsData: ProductItem[] = await productItemsResponse.json();
-  //       const productsData: Product[] = await productsResponse.json();
-
-  //       setProductItems(productItemsData);
-  //       setProducts(productsData);
-  //     } catch (error) {
-  //       console.error('Ошибка при запросе:', error);
-  //       toast.error('Ошибка при загрузке данных.');
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   const form = useForm<CreateProductItemFormValues>({
-    defaultValues: {
-      price: values?.price ? String(values.price) : '',
-      size: values?.size ? String(values.size) : '',
-      pizzaType: values?.pizzaType ? String(values.pizzaType) : '',
-      productId: values?.productId ? String(values.productId) : '',
-    },
+    defaultValues: { price: '', size: '', pizzaType: '', productId: '' },
     resolver: zodResolver(CreateProductItemFormSchema),
   });
 
-  useEffect(() => {
-    if (values && params.id) {
-      form.reset({
-        price: values.price ? values.price.toString() : '',
-        size: values.size ? values.size.toString() : '',
-        pizzaType: values.pizzaType ? values.pizzaType.toString() : '',
-        productId: values.productId ? values.productId.toString() : '',
-      });
-      setIsEdit(true);
+  const fetchProductItemById = async (id: number) => {
+    const response = await fetch(`/api/product-item/${id}`);
+    if (!response.ok) {
+      throw new Error('Не удалось получить элемент продукта');
     }
-  }, [values, params.id, form]);
+    return response.json();
+  };
 
+  useEffect(() => {
+    if (id) {
+      fetchProductItemById(Number(id)).then((fetchedItem) => {
+        form.reset({
+          price: fetchedItem.price.toString(),
+          size: fetchedItem.size?.toString() || '',
+          pizzaType: fetchedItem.pizzaType?.toString() || '',
+          productId: fetchedItem.productId.toString(),
+        });
+        
+        setIsEdit(true);
+      }).catch((error) => {
+        toast.error('Ошибка при загрузке данных товара.');
+      });
+    }
+  }, [id, form]);
+
+  const handleSave = (data: CreateProductItemFormValues) => {
+    // Здесь реализуйте логику сохранения данных
+    toast.success(isEdit ? 'Товар обновлен' : 'Товар создан');
+  };
   
 
-  // const onSubmit = async (data: CreateProductItemFormValues) => {
-  //   try {
-  //     if (values?.id) {
-  //       await updateProductItem(values.id, {
-  //         price: Number(data.price),
-  //         size: data.size ? Number(data.size) : null,
-  //         pizzaType: data.pizzaType ? Number(data.pizzaType) : null,
-  //         product: { connect: { id: Number(data.productId) } }
-  //       });
-  //       toast.success('Товар успешно обновлён!');
-  //     } else {
-  //       await createProductItem({
-  //         price: Number(data.price),
-  //         size: data.size ? Number(data.size) : null,
-  //         pizzaType: data.pizzaType ? Number(data.pizzaType) : null,
-  //         productId: Number(data.productId),
-  //       });
-  //       toast.success('Товар успешно создан!');
-  //     }
-  //     form.reset();
-  //     router.push('/dashboard/product-items');
-  //   } catch (error) {
-  //     toast.error('Произошла ошибка!');
-  //   }
-  // };
-
-  // const onSubmit = async (data: CreateProductItemFormValues) => {
-  //   try {
-  //     if (params.id) {
-  //       await updateProductItem(Number(params.id), {
-  //         price: Number(data.price),
-  //         size: data.size ? Number(data.size) : null,
-  //         pizzaType: data.pizzaType ? Number(data.pizzaType) : null,
-  //         product: { connect: { id: Number(data.productId) } }
-  //       });
-  //       toast.success('Товар успешно обновлён!');
-  //     } else {
-  //       await createProductItem({
-  //         price: Number(data.price),
-  //         size: data.size ? Number(data.size) : null,
-  //         pizzaType: data.pizzaType ? Number(data.pizzaType) : null,
-  //         productId: Number(data.productId),
-  //       });
-  //       toast.success('Товар успешно создан!');
-  //     }
-  //     form.reset();
-  //     router.push('/dashboard/product-items');
-  //   } catch (error) {
-  //     toast.error('Произошла ошибка!');
-  //   }
-  // }; 
-
- //   const form = useForm<CreateProductItemFormValues>({
-//     defaultValues: values 
-//       ? {
-//           price: values.price.toString(),
-//           size: values.size?.toString() || '',
-//           pizzaType: values.pizzaType?.toString() || '',
-//           productId: values.productId.toString(),
-//         }
-//       : defaultValues,
-//     resolver: zodResolver(CreateProductItemFormSchema),
-//   });
-
-  
-
-  // const handleCancelEdit = () => {
-  //   form.reset();
-  //   setIsEdit(false);
-  //   router.push('/dashboard/product-items'); // Очистка ID через роутер
-  // };
-
-  // const handleDelete = async (id: number) => {
-  //   try {
-  //       if (confirm('Вы уверены, что хотите удалить этот продукт?')) {
-  //           await deleteProductItem(id);
-  //           setProductItems((prevItems) => prevItems.filter((item) => item.id !== id));
-  //           toast.success('Товар успешно удалён!');
-  //       }
-  //   } catch (error) {
-  //     toast.error('Произошла ошибка при удалении товара.');
-  //   }
-  // };
-  
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-4">Управление карточкой товара</h1>
       <ProductItemForm   
-        products={products}
-
+        products={products} 
         defaultValues={{
           price: '',
-          size: '',
-          pizzaType: '',
           productId: '',
-        }} onSave={function (data: CreateProductItemFormValues): void {
-          throw new Error('Function not implemented.');
-        } }          />
+          size: '',
+          pizzaType: ''
+        }} 
+        onSave={handleSave}
+                  
+                  />
       {/* {loading ? (
         <p>Загрузка...</p>
       ) : productItems.length > 0 ? (

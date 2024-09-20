@@ -7,7 +7,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { FormInput } from '@/shared/components/shared';
 import type { User, UserRole } from '@prisma/client';
 import { CreateUserFormSchema, CreateUserFormValues } from './constants';
-import { Button } from '@/shared/components';
 import { useRouter, useParams } from 'next/navigation';
 import { createUser, updateUser } from '@/app/actions';
 import toast from 'react-hot-toast';
@@ -37,7 +36,9 @@ export const CreateUserForm: React.FC<Props> = ({ values }) => {
       setLoading(true);
 
       const values = {
-        ...data,
+        fullName: data.fullName || "",
+        email: data.email || "",
+        password: data.password || "",
         role: data.role as UserRole,
       };
 

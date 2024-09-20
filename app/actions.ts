@@ -549,61 +549,8 @@ export async function updateUser(id: number, data: Prisma.UserUpdateInput) {
     return result;
 };
 
-  // const validateData = (data: Prisma.ProductItemUpdateInput) => {
-  //   if (typeof data.price !== 'number' || isNaN(data.price)) {
-  //     throw new Error('Цена должна быть числом.');
-  //   }
-  //   // Добавьте другие проверки по необходимости
-  // };
-  
-  // export const updateProductItem = async (id: number, data: Prisma.ProductItemUpdateInput) => {
-  //   validateData(data);
-  //   const response = await fetch(`/api/product-item/${id}`, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(data),
-  //   });
-  
-  //   if (!response.ok) {
-  //     const errorText = await response.text();
-  //     throw new Error(`Ошибка при обновлении товара: ${errorText}`);
-  //   }
-  
-  //   return response.json();
-  // };
-  
   
 
-  // export const updateProductItem = async (id: number, data: Prisma.ProductItemUpdateInput) => {
-  //   const response = await fetch(`/api/product-item/${id}`, {
-  //     method: 'PUT',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify(data),
-  //   });
-  
-  //   if (!response.ok) {
-  //     throw new Error('Ошибка при обновлении товара');
-  //   }
-  
-  //   return response.json();
-  // };
-  
-  
-  // export const updateProductItem = async (id: number, data: {
-  //   price: number;
-  //   size?: number | null;
-  //   pizzaType?: number | null;
-  //   product: { connect: { id: number } };
-  // }) => {
-  //   return prisma.productItem.update({
-  //     where: { id },
-  //     data,
-  //   });
-  // };
   
   export async function createProductItem(data: Prisma.ProductItemUncheckedCreateInput) {
     try {

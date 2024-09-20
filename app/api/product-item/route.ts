@@ -15,42 +15,6 @@ export async function GET() {
   }
 }
 
-// export async function POST(request: Request) {
-//   try {
-//     const data = await request.json();
-//     const productItem = await prisma.productItem.create({
-//       data: {
-//         price: data.price,
-//         size: data.size,
-//         pizzaType: data.pizzaType,
-//         productId: data.productId,
-//       },
-//     });
-//     return NextResponse.json(productItem);
-//   } catch (error) {
-//     console.error('Ошибка создания элемента продукта:', error);
-//     return NextResponse.error();
-//   }
-// }
-
-// export async function PUT(request: Request) {
-//   try {
-//     const data = await request.json();
-//     const productItem = await prisma.productItem.update({
-//       where: { id: data.id },
-//       data: {
-//         price: data.price,
-//         size: data.size,
-//         pizzaType: data.pizzaType,
-//         productId: data.productId,
-//       },
-//     });
-//     return NextResponse.json(productItem);
-//   } catch (error) {
-//     console.error('Ошибка обновления элемента продукта:', error);
-//     return NextResponse.error();
-//   }
-// }
 
 export async function DELETE(request: Request) {
   try {

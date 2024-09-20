@@ -15,6 +15,11 @@ import { FormInput } from '@/shared/components';
 interface Props {
   values?: Category;
 }
+interface CategoryCreateInput {
+  name: string; 
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
 
 export const CreateCategoryForm: React.FC<Props> = ({ values }) => {
   const params = useParams<{ id: string }>();
@@ -29,13 +34,21 @@ export const CreateCategoryForm: React.FC<Props> = ({ values }) => {
   });
 
   const onSubmit: SubmitHandler<CreateCategoryFormValues> = async (data) => {
+    setLoading(true);
     try {
-      setLoading(true);
 
+      if (!data.name) {
+        throw new Error('Имя категории обязательно');
+      }
+  
+      const categoryData: CategoryCreateInput = {
+        name: data.name, // Приводим тип
+      };
+      
       if (params.id) {
         await updateCategory(+params.id, data);
       } else {
-        await createCategory(data);
+        await createCategory(categoryData);
         router.push('/dashboard/categories');
       }
 

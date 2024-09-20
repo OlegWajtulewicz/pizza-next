@@ -2,7 +2,7 @@ import { CartDTO } from "../services/dto/cart.dto";
 import { calcCartItemTotalPrice } from "./calc-cart-item-total-price";
 
 export type CartStateItem = {
-    cartId(cartId: any): void;
+    cartId: number;
     id: number;
     quantity: number;
     name: string;
@@ -27,6 +27,7 @@ export const getCartDetails = (data: CartDTO | null): ReturnProps => {
     }
 
     const items = data.items.map((item) => ({
+        cartId: item.cartId,
         id: item.id,
         quantity: item.quantity,
         name: item.productItem.product.name,
