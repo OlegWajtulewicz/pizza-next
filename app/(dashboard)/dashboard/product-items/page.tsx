@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { CreateProductItemFormSchema, CreateProductItemFormValues } from '@/shared/components/shared/dashboard/forms/create-product-item-form/constants';
 import ProductItemForm from '@/shared/components/shared/dashboard/forms/create-product-item-form/product-item-form-create';
 import toast from 'react-hot-toast';
@@ -76,8 +76,10 @@ export default function DashboardProductItems() {
           pizzaType: ''
         }} 
         onSave={handleSave}
-                  
-                  />
+        />
+
+
+
       {/* {loading ? (
         <p>Загрузка...</p>
       ) : productItems.length > 0 ? (

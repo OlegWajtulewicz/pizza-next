@@ -24,9 +24,9 @@ type CreateProductItemFormValues = {
     size?: string; 
     pizzaType?: string;
 }
-interface Props extends PageProps {
-  handleDelete?: (id: number) => void;
-}
+// interface Props extends PageProps {
+//   handleDelete?: (id: number) => void;
+// }
 
 const ProductItemForm: React.FC<PageProps> = () => {
   const params = useParams<{ id: string }>();
