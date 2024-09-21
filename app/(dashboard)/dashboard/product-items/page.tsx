@@ -1,6 +1,6 @@
 'use client';
 
-import {  ProductItem } from "@prisma/client";
+import {  Product, ProductItem } from "@prisma/client";
 import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { FormProvider, useForm, SubmitHandler } from "react-hook-form";
@@ -20,14 +20,14 @@ interface PageProps {
 //  defaultValues: CreateProductItemFormValues;
  // onSave: (data: CreateProductItemFormValues) => void;
 }
-interface Product {
-  id: number;
-  name: string;
-  imageUrl: string;
-  categoryId: number;
-  createdAt: Date;
-  updatedAt: Date;
-}
+// interface Product {
+//   id: number;
+//   name: string;
+//   imageUrl: string;
+//   categoryId: number;
+//   createdAt: Date;
+//   updatedAt: Date;
+// }
 type CreateProductItemFormValues = {
     price: string;
     productId: string;
