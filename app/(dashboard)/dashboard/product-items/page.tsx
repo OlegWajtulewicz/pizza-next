@@ -73,7 +73,7 @@ export default function DashboardProductItems() {
           price: '',
           productId: '',
           size: '',
-          pizzaType: ''
+          pizzaType: '',
         }} 
         onSave={handleSave}
         />
