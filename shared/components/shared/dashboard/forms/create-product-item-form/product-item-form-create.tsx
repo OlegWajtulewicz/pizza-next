@@ -93,8 +93,6 @@ const ProductItemForm: React.FC<PageProps> = () => {
   // Сабмит формы
   const onSubmit: SubmitHandler<CreateProductItemFormValues> = async (data) => {
     setLoading(true);
-
-    
     try {
       if (isEdit && params.id) {
         const updateData: ProductItemUpdateInput = {
