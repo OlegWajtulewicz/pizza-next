@@ -10,7 +10,7 @@ import { Button } from "@/shared/components/ui";
 import { createProductItem, deleteProductItem } from "@/app/actions";
 import toast from "react-hot-toast";
 import { ProductItemUpdateInput } from "@/@types/next-auth";
-import { CreateProductItemFormSchema } from "@/shared/components/shared/dashboard/forms/create-product-item-form/constants";
+import { CreateProductItemFormSchema, CreateProductItemFormValues } from "@/shared/components/shared/dashboard/forms/create-product-item-form/constants";
 import { FormInput } from "@/shared/components";
 import { FormSelect } from "@/shared/components/shared/form-components/form-select";
 
@@ -28,12 +28,12 @@ interface PageProps {
 //   createdAt: Date;
 //   updatedAt: Date;
 // }
-type CreateProductItemFormValues = {
-    price: string;
-    productId: string;
-    size?: string; 
-    pizzaType?: string;
-};
+// type CreateProductItemFormValues = {
+//     price: string;
+//     productId: string;
+//     size?: string; 
+//     pizzaType?: string;
+// };
 
 const DashboardProductItems: React.FC = () => {
   const params = useParams<{ id: string }>();
