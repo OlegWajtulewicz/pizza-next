@@ -35,7 +35,7 @@ type CreateProductItemFormValues = {
     pizzaType?: string;
 };
 
-const DashboardProductItems: React.FC<PageProps> = () => {
+const DashboardProductItems: React.FC = () => {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
