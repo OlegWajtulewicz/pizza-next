@@ -15,11 +15,11 @@ import { FormInput } from "@/shared/components";
 import { FormSelect } from "@/shared/components/shared/form-components/form-select";
 
 
-interface PageProps {
+//interface PageProps {
  // products: Product[];
 //  defaultValues: CreateProductItemFormValues;
  // onSave: (data: CreateProductItemFormValues) => void;
-}
+//}
 // interface Product {
 //   id: number;
 //   name: string;
