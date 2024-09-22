@@ -15,25 +15,7 @@ import { FormInput } from "@/shared/components";
 import { FormSelect } from "@/shared/components/shared/form-components/form-select";
 
 
-//interface PageProps {
- // products: Product[];
-//  defaultValues: CreateProductItemFormValues;
- // onSave: (data: CreateProductItemFormValues) => void;
-//}
-// interface Product {
-//   id: number;
-//   name: string;
-//   imageUrl: string;
-//   categoryId: number;
-//   createdAt: Date;
-//   updatedAt: Date;
-// }
-// type CreateProductItemFormValues = {
-//     price: string;
-//     productId: string;
-//     size?: string; 
-//     pizzaType?: string;
-// };
+
 
 const DashboardProductItems: React.FC = () => {
   const params = useParams<{ id: string }>();
@@ -136,6 +118,7 @@ const DashboardProductItems: React.FC = () => {
       setLoading(false);
       setIsEdit(false);
       form.reset();
+      router.push("/dashboard/product-items");
     }
   };
 
